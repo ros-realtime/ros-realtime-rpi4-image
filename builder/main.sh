@@ -3,21 +3,27 @@
 set -e -o pipefail
 
 CURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-OVERRIDE_SH=${1:-${CURDIR}/../overrides.sh}
-OVERRIDE_SH=$(readlink -f $OVERRIDE_SH)
-CACHE_DIR=$(readlink -f "$CURDIR/../build_cache")
+VARS_SH=${1:-${CURDIR}/../vars.sh}
+VARS_SH=$(readlink -f $VARS_SH)
+
+if [ ! -f "$VARS_SH" ]; then
+  echo "error: $VARS_SH is not a valid file!" >&2
+  exit 1
+fi
+
+CACHE_DIR=$(readlink -f "$CURDIR/../cache")
 SESSION_FILE=${CACHE_DIR}/session.txt
 SESSION_LOOP_DEVICE_FILE=${CACHE_DIR}/session-loop-device.txt
 
 source ${CURDIR}/utils.sh
 source ${CURDIR}/core.sh
-source ${OVERRIDE_SH}
+source ${VARS_SH}
 
 if [ "$VERBOSE" == "yes" ]; then
   set -x
 fi
 
-# TODO: trap exit
+# TODO: trap exit to ensure we don't end up in a broken state
 
 mkdir -p $CACHE_DIR
 cd $CACHE_DIR

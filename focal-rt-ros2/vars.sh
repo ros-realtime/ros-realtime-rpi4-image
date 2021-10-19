@@ -7,8 +7,8 @@
 # Do not set -x if VERBOSE is not set or set to no.
 VERBOSE=${VERBOSE:-no}
 
-# The image url to download and customize. Please use the im
-IMAGE_URL="https://cdimage.ubuntu.com/releases/18.04.5/release/ubuntu-18.04.5-preinstalled-server-arm64+raspi4.img.xz"
+# The image url to download and customize.
+IMAGE_URL="https://cdimage.ubuntu.com/releases/20.04.3/release/ubuntu-20.04.3-preinstalled-server-arm64+raspi.img.xz"
 
 # The partition number of the rootfs. Partition number starts at 0.
 # TODO: This should always be the last partition, otherwise resize won't work.
@@ -27,14 +27,20 @@ IMAGE_PARTITION_MOUNTS=(
 IMAGE_SIZE=4G
 
 # Absolute path of the output image on the host.
-OUTPUT_FILENAME=$(pwd)/build/rpi4.img
+OUTPUT_FILENAME=$(pwd)/out/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img
 
 # Absolute to the location of the rootfs on the host that will be copied into
 # the chroot and therefore the final image.
 #
 # Note: This is in rsync format, so must have a trailing slash if you want to
 # actually merge the content into the rootfs and not create another subdirectory.
-ROOTFS_OVERLAY=$(pwd)/rootfs/
+ROOTFS_OVERLAY=$(pwd)/focal-rt-ros2/rootfs/
+
+#################
+# Setup scripts #
+#################
+
+# There are four setup scripts:
 
 # Absolute paths to the scripts that runs in phase1 and phase 2 on the host
 # that runs on the host.
@@ -80,7 +86,7 @@ custom_extract_image() {
   xzcat --decompress $1
 }
 
-# TODO: put this code directly in core.sh
+# Each image may be slightly different, but maybe we can put this code directly in core.sh.
 custom_loop_device_setup() {
   local loop_device=$1
 

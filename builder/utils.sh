@@ -49,7 +49,7 @@ verify_build_can_proceed() {
   # Checking required functions
   for f in custom_extract_image; do
     if __function_does_not_exist $f; then
-      echo "error: function $f does not exist, define it in $OVERRIDE_SH." >&2
+      echo "error: function $f does not exist, define it in $VARS_SH." >&2
       exit 1
     fi
   done
@@ -65,7 +65,7 @@ verify_build_can_proceed() {
   # Checking required parameters
   for v in "${required_variables[@]}"; do
     if [ -z "${!v}" ]; then
-      echo "error: variable $v is not defined, define it in $OVERRIDE_SH." >&2
+      echo "error: variable $v is not defined, define it in $VARS_SH." >&2
       exit 1
     fi
   done
