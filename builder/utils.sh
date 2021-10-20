@@ -115,14 +115,6 @@ verify_build_can_proceed() {
   fi
 }
 
-set_default_values() {
-  # Setting default values
-  # CHROOT_PATH is exported
-  export CHROOT_PATH=${CHROOT_PATH:-/tmp/rpi4-image-build} # TODO: change this path to something more generic
-  DOWNLOAD_CACHE_PATH="$CACHE_DIR/$(basename ${IMAGE_URL})"
-  NAMESERVER=${NAMESERVER:-1.1.1.1}
-}
-
 print_build_information() {
   local session_file_exists=""
   if [ -f $SESSION_FILE ]; then

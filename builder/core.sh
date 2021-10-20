@@ -74,6 +74,7 @@ prepare_chroot() {
   echo "nameserver ${NAMESERVER}" >> ${CHROOT_PATH}/etc/resolv.conf
 
   cp ${QEMU_USER_STATIC_PATH} ${CHROOT_PATH}${QEMU_USER_STATIC_PATH}
+  cp ${VARS_SH} ${CHROOT_PATH}/vars.sh
 }
 
 copy_files_to_chroot() {
@@ -121,9 +122,13 @@ cleanup_chroot() {
   rm ${CHROOT_PATH}/etc/resolv.conf
   mv ${CHROOT_PATH}/etc/resolv.conf.bak ${CHROOT_PATH}/etc/resolv.conf
   rm ${CHROOT_PATH}${QEMU_USER_STATIC_PATH}
+  rm ${CHROOT_PATH}/vars.sh
 }
 
 umount_everything() {
+  log_in_step "Final system size:"
+  df -h $CHROOT_PATH
+
   log_in_step "unmounting everything"
   if [ -z "$g_loop_device" ]; then
     g_loop_device=$(cat $SESSION_LOOP_DEVICE_FILE)

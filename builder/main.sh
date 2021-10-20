@@ -11,13 +11,19 @@ if [ ! -f "$VARS_SH" ]; then
   exit 1
 fi
 
-CACHE_DIR=$(readlink -f "$CURDIR/../cache")
+# CACHE_DIR is exported so the user-defined phase1/2 scripts can use it.
+export CACHE_DIR=$(readlink -f "$CURDIR/../cache")
 SESSION_FILE=${CACHE_DIR}/session.txt
 SESSION_LOOP_DEVICE_FILE=${CACHE_DIR}/session-loop-device.txt
 
 source ${CURDIR}/utils.sh
 source ${CURDIR}/core.sh
 source ${VARS_SH}
+
+# CHROOT_PATH is exported so the user-defined phase1/2 scripts can use it.
+export CHROOT_PATH=${CHROOT_PATH:-/tmp/rpi4-image-build} # TODO: change this path to something more generic
+DOWNLOAD_CACHE_PATH="$CACHE_DIR/$(basename ${IMAGE_URL})"
+NAMESERVER=${NAMESERVER:-1.1.1.1}
 
 if [ "$VERBOSE" == "yes" ]; then
   set -x
@@ -29,7 +35,6 @@ mkdir -p $CACHE_DIR
 cd $CACHE_DIR
 
 verify_build_can_proceed
-set_default_values
 print_build_information
 
 if [ -n "$DRYRUN" ]; then

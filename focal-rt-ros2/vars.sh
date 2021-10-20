@@ -1,3 +1,18 @@
+# pwd should always be the root of this repository when builder/main.sh is called.
+curdir=$(pwd)/focal-rt-ros2
+
+####################
+# Custom variables #
+####################
+
+# These variables will be forwarded to all the phase1 phase2 scripts if they
+# are exported.
+
+export ENABLE_SSH=1
+export LINUX_RT_VERSION=5.4.106-rt54
+export LINUX_RT_VERSION_ACTUALLY=5.4.140-rt64 # This is a bug, the release tag should match the content, but it doesn't
+# export CMAKE_TOOLCHAIN_FILE=$(pwd)/aarch64.cmake
+
 ###################
 # Build Variables #
 ###################
@@ -24,7 +39,7 @@ IMAGE_PARTITION_MOUNTS=(
 
 # This is passed to truncate --size=$IMAGE_SIZE when operating against the .img file.
 # TODO: Note that always the last partition will be expanded as I just call truncate for now.
-IMAGE_SIZE=4G
+IMAGE_SIZE=8G
 
 # Absolute path of the output image on the host.
 OUTPUT_FILENAME=$(pwd)/out/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img
@@ -34,42 +49,50 @@ OUTPUT_FILENAME=$(pwd)/out/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img
 #
 # Note: This is in rsync format, so must have a trailing slash if you want to
 # actually merge the content into the rootfs and not create another subdirectory.
-ROOTFS_OVERLAY=$(pwd)/focal-rt-ros2/rootfs/
+ROOTFS_OVERLAY=${curdir}/rootfs/
 
 #################
 # Setup scripts #
 #################
 
-# There are four setup scripts:
+# Host side setup scripts #
+# ----------------------- #
 
 # Absolute paths to the scripts that runs in phase1 and phase 2 on the host
 # that runs on the host.
-# SETUP_PHASE1_OUTSIDE_CHROOT=$(pwd)/phase1-outside.sh
-# SETUP_PHASE2_OUTSIDE_CHROOT=$(pwd)/phase2-outside.sh # don't need it
+
+# Phase 1 is generally for fetching prebuilt binaries and copying them into the
+# chroot. Basically any files that cannot be put in the ROOTFS_OVERLAY should
+# be generated and copied in this step.
+SETUP_PHASE1_OUTSIDE_CHROOT=${curdir}/phase1-outside.sh
+
+# Phase 2 is generally for cross compiling (such as via CMake), because the
+# rootfs should already be setup with all the dependencies at this point.
+# SETUP_PHASE2_OUTSIDE_CHROOT=$(pwd)/phase2-outside.sh # don't need it for this
+
+# Chroot-side setup scripts #
+# ------------------------- #
 
 # Absolute path to the scripts that runs in phase1 and phase2 in the chroot
 # that runs inside the chroot.
 #
 # Note: Put these scripts in the ROOTFS_OVERLAY as the copy of the overlay
 # happens before these scripts fires.
+
+# Phase 1 is generall for installing packages.
 SETUP_PHASE1_INSIDE_CHROOT=/setup/phase1.sh
+
+# Phase 2 is for removing files in the chroot that are placed to help with the
+# setup of the image.
 SETUP_PHASE2_INSIDE_CHROOT=/setup/phase2.sh
 
 # Path to qemu-user-static on the host, which will be copied into the chroot to
 # the same path.
 QEMU_USER_STATIC_PATH=/usr/bin/qemu-aarch64-static
 
-# Uncomment this if you want the builder to pause to debug things.
-# PAUSE_AFTER=setup_script_phase2_outside_chroot
-
-####################
-# Custom variables #
-####################
-
-# These variables will be forwarded to all the phase1 phase2 scripts if they
-# are exported.
-
-# export CMAKE_TOOLCHAIN_FILE=$(pwd)/aarch64.cmake
+# Uncomment and change this if you want the builder to pause after a particular
+# step to debug/experiment.
+# PAUSE_AFTER=setup_script_phase1_inside_chroot
 
 ######################
 # Override functions #
