@@ -31,38 +31,40 @@ The RT image built by this also has a bunch of features, check
 
 ### Todos
 
-- [ ] Implement systemd startup service to pin CPU to a configurable frequency.
 - [ ] Setup /etc/security/limits.conf (or maybe limits.conf.d)
 - [ ] Actually install ROS2 :).
-- [ ] Optionally configure 
+- [ ] Optionally configure isolcpus and nohz_full for the kernel.
 - [ ] Fix the issue with `LINUX_RT_VERSION` and `LINUX_RT_VERSION_ACTUALLY` (see `vars.sh`).
 - [ ] Possibly build the RT kernel directly here instead of downloading it.
 - [ ] Use a sha256 checksum to ensure downloaded image and kernel are "secure".
+- [ ] Add overclocking support
 
 How to use
 ----------
 
 ### System requirements
 
-Unfortunately, the current setup doesn't work in Docker, as I used
-`systemd-nspawn` to make setting up and executing commands in a chroot easier
+**Why not docker?** Unfortunately, the current setup doesn't work in Docker, as 
+I used `systemd-nspawn` to make setting up and executing commands in a chroot easier
 (mainly so I can save some time figuring out the various bind mounts I need, to
 shutdown the container correctly if a command fails, and to force quit a
 container if something goes really wrong by pressing ^] 3 times).  This tool
 also rely on loop devices, which are not namespaced and thus not readily usable
-in Docker without privileged access. Thus, you'll need a Linux machine with root
-and the following tools installed: `cut`, `grep`, `parted`, `pv`, `rsync`,
-`truncate`, `wget`, `systemd-nspawn`, and `qemu-aarch64-static`.
+in Docker without privileged access. It may be possible to use Docker later by
+changing this code, but for now it's not possible (the code will also likely be
+uglier as nspawn can't be easily used in docker?).
+
+Thus, you'll need a Linux machine with root and the following tools installed:
+`cut`, `grep`, `parted`, `pv`, `rsync`, `truncate`, `wget`, `systemd-nspawn`,
+and `qemu-aarch64-static`.
+
+To build the `focal-rt-ros2` image, you'll also need: `zip`.
 
 For Ubuntu, you can simply run:
 
 ```
-$ sudo apt install parted pv rsync wget systemd-containers qemu-user-static make
+$ sudo apt install parted pv rsync wget systemd-containers qemu-user-static make zip
 ```
-
-To build the `focal-rt-ros2` image, you'll also need:
-
-- `zip`: the `zip` package in Ubuntu.
 
 ### To run
 
@@ -70,11 +72,12 @@ To build the `focal-rt-ros2` image, you'll also need:
 $ make ros2-rt
 ```
 
-This will build the image to `build/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img`. You can then `dd` this to a SD card.
+This will build the image to `build/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img`. 
+You can then `dd` this to a SD card.
 
 You can see a demo of this in [CI](#TODO).
 
-### Debugging your build
+### Debugging build failures if you changed stuff
 
 _This is covered in [How it works](#how-it-works)._
 

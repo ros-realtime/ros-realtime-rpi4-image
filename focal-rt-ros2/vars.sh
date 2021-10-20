@@ -10,6 +10,8 @@ curdir=$(pwd)/focal-rt-ros2
 
 export LINUX_RT_VERSION=5.4.106-rt54
 export LINUX_RT_VERSION_ACTUALLY=5.4.140-rt64 # This is a bug, the release tag should match the content, but it doesn't
+
+export PINNED_CPU_FREQUENCY=1500000
 # export CMAKE_TOOLCHAIN_FILE=$(pwd)/aarch64.cmake
 
 ###################
@@ -91,7 +93,7 @@ QEMU_USER_STATIC_PATH=/usr/bin/qemu-aarch64-static
 
 # Uncomment and change this if you want the builder to pause after a particular
 # step to debug/experiment.
-# PAUSE_AFTER=setup_script_phase1_inside_chroot
+PAUSE_AFTER=setup_script_phase1_inside_chroot
 
 ######################
 # Override functions #

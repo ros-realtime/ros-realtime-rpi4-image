@@ -17,4 +17,6 @@ unzip $filename
 cp linux-*.deb $CHROOT_PATH/setup/
 rm linux-*.deb
 
+echo "PINNED_CPU_FREQUENCY=${PINNED_CPU_FREQUENCY}" > $CHROOT_PATH/etc/default/cpu-frequency
+
 popd
