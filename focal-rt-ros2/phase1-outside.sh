@@ -17,8 +17,4 @@ unzip $filename
 cp linux-*.deb $CHROOT_PATH/setup/
 rm linux-*.deb
 
-if [ "$ENABLE_SSH" == "1" ]; then
-  touch $CHROOT_PATH/boot/ssh
-fi
-
 popd

@@ -25,4 +25,9 @@ systemctl disable ondemand
 
 # TODO: If specified, create an image with isolcpus already setup.
 
+export DEBIAN_FRONTEND=noninteractive
+
+# Install some misc packages
+apt-get install -y cpufrequtils
+
 # Install ROS2

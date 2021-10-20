@@ -1,0 +1,12 @@
+[Unit]
+Description=Pin CPU frequency for more predictable performance
+ConditionPathExists=/sys/devices/system/cpu/online
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=/etc/default/cpu-frequency
+ExecStart=/opt/ros2-rt-rpi4/cpu-frequency
+
+[Install]
+WantedBy=multi-user.target

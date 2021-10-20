@@ -26,6 +26,16 @@ This is a custom image builder for the Raspberry Pi 4. Some features:
   - Nice logs that aids with debugging of the build, should things go wrong.
   - Use tools like `pv` to display progress when applicable.
 
+### Todos
+
+- [ ] Implement systemd startup service to pin CPU to a configurable frequency.
+- [ ] Setup /etc/security/limits.conf (or maybe limits.conf.d)
+- [ ] Actually install ROS2 :).
+- [ ] Optionally configure 
+- [ ] Fix the issue with `LINUX_RT_VERSION` and `LINUX_RT_VERSION_ACTUALLY` (see `vars.sh`).
+- [ ] Possibly build the RT kernel directly here instead of downloading it.
+- [ ] Use a sha256 checksum to ensure downloaded image and kernel are "secure".
+
 How to use
 ----------
 
@@ -57,7 +67,7 @@ To build the `focal-rt-ros2` image, you'll also need:
 $ make ros2-rt
 ```
 
-This will build the image to `build/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img`.
+This will build the image to `build/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img`. You can then `dd` this to a SD card.
 
 You can see a demo of this in [CI](#TODO).
 

@@ -57,3 +57,5 @@ run_step cleanup_chroot
 run_step umount_everything
 
 end_session_file
+
+log "Built image at $OUTPUT_FILENAME"

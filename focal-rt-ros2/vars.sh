@@ -8,7 +8,6 @@ curdir=$(pwd)/focal-rt-ros2
 # These variables will be forwarded to all the phase1 phase2 scripts if they
 # are exported.
 
-export ENABLE_SSH=1
 export LINUX_RT_VERSION=5.4.106-rt54
 export LINUX_RT_VERSION_ACTUALLY=5.4.140-rt64 # This is a bug, the release tag should match the content, but it doesn't
 # export CMAKE_TOOLCHAIN_FILE=$(pwd)/aarch64.cmake
