@@ -1,5 +1,6 @@
 #!/bin/bash
 
+echo performance | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
 echo $PINNED_CPU_FREQUENCY | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_min_freq
 echo $PINNED_CPU_FREQUENCY | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
 echo 1 | tee /sys/devices/system/cpu/cpu*/cpufreq/stats/reset

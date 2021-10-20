@@ -1,6 +1,8 @@
 Custom Image Builder for the Raspberry Pi 4 for ROS2 + PREEMPT_RT
 =================================================================
 
+[![Build image](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions/workflows/build.yml/badge.svg)](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions/workflows/build.yml)
+
 This is a custom image builder for the Raspberry Pi 4. Some features:
 
 - Customize the official Ubuntu server image for the Raspberry Pi by mounting
@@ -25,14 +27,20 @@ This is a custom image builder for the Raspberry Pi 4. Some features:
     pause because there are some typos in the build scripts.
   - Nice logs that aids with debugging of the build, should things go wrong.
   - Use tools like `pv` to display progress when applicable.
-
-The RT image built by this also has a bunch of features, check
-`focal-rt/ros2/rootfs/setup/phase1.sh` about what it does.
+- The features of the actual RT image is difficult to document without becoming
+  out of date quickly. Please take a look at `focal-rt-ros2/ros2/rootfs/setup/phase1.sh`
+  for the setup script that runs against the Ubuntu image and `focal-rt-ros2/rootfs`
+  for files that gets overlaid on top of the Ubuntu image. That said, some basics are:
+  - Installed [`PREEMPT_RT` kernel](https://github.com/ros-realtime/rt-kernel-docker-builder).
+  - Pinned CPU frequency and performance governor.
+  - Removed some unnecessary services like snapd and fwupd to save resources.
+  - Installed ROS2 galactic from apt.
+  - Installed some misc. tooling (like `vcgencmd`).
 
 ### Todos
 
 - [ ] Setup /etc/security/limits.conf (or maybe limits.conf.d)
-- [ ] Actually install ROS2 :).
+- [ ] Install ROS2 with source build instead of just via apt?.
 - [ ] Optionally configure isolcpus and nohz_full for the kernel.
 - [ ] Fix the issue with `LINUX_RT_VERSION` and `LINUX_RT_VERSION_ACTUALLY` (see `vars.sh`).
 - [ ] Possibly build the RT kernel directly here instead of downloading it.
