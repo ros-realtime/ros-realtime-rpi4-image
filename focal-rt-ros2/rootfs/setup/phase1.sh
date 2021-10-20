@@ -20,12 +20,14 @@ cp /boot/initrd.img /boot/firmware/initrd.img.bak
 
 # Disable ondemand govenor and set constant frequency
 systemctl disable ondemand
-# TODO: create systemd startup service to pin the CPU to a configurable
-# frequency (via /etc/default/cpu-frequency)
+systemctl enable cpu-frequency
 
 # TODO: If specified, create an image with isolcpus already setup.
 
 export DEBIAN_FRONTEND=noninteractive
+
+# Remove snapd as it is not really needed most of the time
+apt-get purge --autoremove -y snapd
 
 # Install some misc packages
 apt-get install -y cpufrequtils

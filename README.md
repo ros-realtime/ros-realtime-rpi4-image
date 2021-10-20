@@ -26,6 +26,9 @@ This is a custom image builder for the Raspberry Pi 4. Some features:
   - Nice logs that aids with debugging of the build, should things go wrong.
   - Use tools like `pv` to display progress when applicable.
 
+The RT image built by this also has a bunch of features, check
+`focal-rt/ros2/rootfs/setup/phase1.sh` about what it does.
+
 ### Todos
 
 - [ ] Implement systemd startup service to pin CPU to a configurable frequency.

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "phase 2"
+rm -rf /setup
