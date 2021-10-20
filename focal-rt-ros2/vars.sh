@@ -93,7 +93,7 @@ QEMU_USER_STATIC_PATH=/usr/bin/qemu-aarch64-static
 
 # Uncomment and change this if you want the builder to pause after a particular
 # step to debug/experiment.
-PAUSE_AFTER=setup_script_phase1_inside_chroot
+# PAUSE_AFTER=setup_script_phase1_inside_chroot
 
 ######################
 # Override functions #
@@ -114,7 +114,7 @@ custom_extract_image() {
 custom_loop_device_setup() {
   local loop_device=$1
 
-  e2fsck -f ${loop_device}p2
+  e2fsck -y -f ${loop_device}p2
   resize2fs ${loop_device}p2
 }
 

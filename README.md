@@ -63,19 +63,19 @@ To build the `focal-rt-ros2` image, you'll also need: `zip`.
 For Ubuntu, you can simply run:
 
 ```
-$ sudo apt install parted pv rsync wget systemd-containers qemu-user-static make zip
+$ sudo apt install parted pv rsync wget systemd-container qemu-user-static make zip
 ```
 
 ### To run
 
 ```
-$ make ros2-rt
+$ make focal-rt-ros2
 ```
 
 This will build the image to `build/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img`. 
 You can then `dd` this to a SD card.
 
-You can see a demo of this in [CI](#TODO).
+You can see a demo of this in [CI](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions). CI builds quite slowly. On my computer this whole process only takes a few minutes.
 
 ### Debugging build failures if you changed stuff
 

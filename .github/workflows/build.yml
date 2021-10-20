@@ -1,0 +1,19 @@
+name: Build image
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup build dependencies
+        run: .github/workflows/setup-dependencies.sh
+
+      - name: Build image
+        run: .github/workflows/build.sh
+
+      # TODO: release, but the file is really big (8GB)

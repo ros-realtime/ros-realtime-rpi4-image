@@ -1,6 +1,6 @@
 download_and_extract_image_if_necessary() {
   if [ ! -f $DOWNLOAD_CACHE_PATH ]; then
-    wget -O $DOWNLOAD_CACHE_PATH $IMAGE_URL
+    wget --progress=dot -e dotbytes=10M -O $DOWNLOAD_CACHE_PATH $IMAGE_URL
   else
     log_in_step "already downloaded image, so only extracting it"
   fi

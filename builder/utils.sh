@@ -20,13 +20,13 @@ run_step() {
   log "running $step $extra_log"
   $step
 
-  if [ "$PAUSE_AFTER" == "$step" ]; then
-    log "Pausing at $step as it is configured in PAUSE_AFTER"
-    exit 1
-  fi
-
   if [ "$2" != "idempotent" ]; then
     echo "$step" >> $SESSION_FILE
+  fi
+
+  if [ "$PAUSE_AFTER" == "$step" ]; then
+    log "Pausing after $step as it is configured in PAUSE_AFTER"
+    exit 1
   fi
 }
 

@@ -7,7 +7,7 @@ pushd $CACHE_DIR
 # Get the kernel
 filename=rpi4-rt-kernel-${LINUX_RT_VERSION}.zip
 if [ ! -f $filename ]; then
-  wget -O $filename https://github.com/ros-realtime/rt-kernel-docker-builder/releases/download/v${LINUX_RT_VERSION}-raspi-arm64-lttng/RPI4.RT.Kernel.deb.packages.zip
+  wget --progress=dot -e dotbytes=10M -O $filename https://github.com/ros-realtime/rt-kernel-docker-builder/releases/download/v${LINUX_RT_VERSION}-raspi-arm64-lttng/RPI4.RT.Kernel.deb.packages.zip
 fi
 
 unzip $filename
