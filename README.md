@@ -1,7 +1,7 @@
 Custom Image Builder for the Raspberry Pi 4 for ROS2 + PREEMPT_RT
 =================================================================
 
-[![Build image](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions/workflows/build.yml/badge.svg)](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions/workflows/build.yml)
+[![Build image](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml/badge.svg)](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml)
 
 This is a custom image builder for the Raspberry Pi 4. Some features:
 
