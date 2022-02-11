@@ -56,7 +56,7 @@ sudo apt-get update
 sudo apt-get install -y ros-galactic-ros-base
 
 # Install some misc packages
-apt-get install -y cpufrequtils libraspberrypi-bin
+apt-get install -y cpufrequtils libraspberrypi-bin rt-tests cpuset stress stress-ng
 
 # clean up to reduce image size
 apt-get clean
