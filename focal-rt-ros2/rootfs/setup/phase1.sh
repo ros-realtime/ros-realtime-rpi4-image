@@ -50,7 +50,7 @@ systemctl enable cpu-frequency
 
 
 # Disable unattended-upgrades
-dpkg-reconfigure -plow unattended-upgrades -fnoninteractive
+apt remove -y unattended-upgrades
 
 # TODO: If specified, create an image with isolcpus already setup.
 
