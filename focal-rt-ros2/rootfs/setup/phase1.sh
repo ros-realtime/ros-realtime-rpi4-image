@@ -52,7 +52,6 @@ systemctl enable cpu-frequency
 # Disable unattended-upgrades
 apt remove -y unattended-upgrades
 
-
 # TODO: If specified, create an image with isolcpus already setup.
 
 # Setup ROS distro and ROS
