@@ -52,6 +52,7 @@ systemctl enable cpu-frequency
 # Disable unattended-upgrades
 apt remove -y unattended-upgrades
 
+
 # TODO: If specified, create an image with isolcpus already setup.
 
 # Setup ROS distro and ROS
@@ -60,7 +61,7 @@ sudo apt-get update
 sudo apt-get install -y ros-galactic-ros-base
 
 # Install some misc packages
-apt-get install -y cpufrequtils libraspberrypi-bin
+apt-get install -y cpufrequtils libraspberrypi-bin rt-tests cpuset stress stress-ng
 
 # clean up to reduce image size
 apt-get clean
