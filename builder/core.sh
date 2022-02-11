@@ -78,7 +78,7 @@ prepare_chroot() {
 }
 
 copy_files_to_chroot() {
-  rsync -ar --stats $ROOTFS_OVERLAY $CHROOT_PATH
+  rsync -r -og --chown root:root --stats $ROOTFS_OVERLAY $CHROOT_PATH
 }
 
 setup_script_phase1_outside_chroot() {

@@ -1,7 +1,7 @@
 Custom Image Builder for the Raspberry Pi 4 for ROS2 + PREEMPT_RT
 =================================================================
 
-[![Build image](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions/workflows/build.yml/badge.svg)](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions/workflows/build.yml)
+[![Build image](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml/badge.svg)](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml)
 
 This is a custom image builder for the Raspberry Pi 4. Some features:
 
@@ -40,10 +40,8 @@ This is a custom image builder for the Raspberry Pi 4. Some features:
 ### Todos
 
 - [ ] Setup /etc/security/limits.conf (or maybe limits.conf.d)
-- [ ] Install ROS2 with source build instead of just via apt?.
 - [ ] Optionally configure isolcpus and nohz_full for the kernel.
 - [ ] Fix the issue with `LINUX_RT_VERSION` and `LINUX_RT_VERSION_ACTUALLY` (see `vars.sh`).
-- [ ] Possibly build the RT kernel directly here instead of downloading it.
 - [ ] Use a sha256 checksum to ensure downloaded image and kernel are "secure".
 - [ ] Add overclocking support
 
@@ -188,6 +186,7 @@ where it failed.
 
 ### How to reset your host system if something horribly goes wrong
 
+- Try running `./scripts/cleanup.sh`
 - Try running the commands in `umount_everything` manually (see
   `builder/core.sh`).
   - Can do this by adding every step in `builder/main.sh` into

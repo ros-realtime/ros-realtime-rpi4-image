@@ -10,6 +10,7 @@ curdir=$(pwd)/focal-rt-ros2
 
 export LINUX_RT_VERSION=5.4.106-rt54
 export LINUX_RT_VERSION_ACTUALLY=5.4.140-rt64 # This is a bug, the release tag should match the content, but it doesn't
+export STOCK_LINUX_VERSION=5.4.0-1042 # This is the linux version that stock ubuntu comes with that we can uninstall.
 
 export PINNED_CPU_FREQUENCY=1500000
 # export CMAKE_TOOLCHAIN_FILE=$(pwd)/aarch64.cmake
@@ -40,7 +41,7 @@ IMAGE_PARTITION_MOUNTS=(
 
 # This is passed to truncate --size=$IMAGE_SIZE when operating against the .img file.
 # TODO: Note that always the last partition will be expanded as I just call truncate for now.
-IMAGE_SIZE=8G
+IMAGE_SIZE=4G
 
 # Absolute path of the output image on the host.
 OUTPUT_FILENAME=$(pwd)/out/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img

@@ -19,4 +19,3 @@ fi
 
 sudo rm ${CACHE_DIR}/session.txt
 sudo rm ${CACHE_DIR}/session-loop-device.txt
-
