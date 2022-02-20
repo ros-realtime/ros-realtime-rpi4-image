@@ -1,3 +1,5 @@
+#!/bin/bash
+
 log() {
   echo "[$(date +'%H:%M:%S')] $1"
 }
@@ -47,6 +49,7 @@ step_in_session() {
 
 verify_build_can_proceed() {
   # Checking required functions
+  # shellcheck disable=SC2043
   for f in custom_extract_image; do
     if __function_does_not_exist $f; then
       echo "error: function $f does not exist, define it in $VARS_SH." >&2
