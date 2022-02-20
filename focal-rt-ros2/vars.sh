@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2034
 
 # pwd should always be the root of this repository when builder/main.sh is called.
 curdir=$(pwd)/focal-rt-ros2
@@ -27,18 +28,15 @@ export PINNED_CPU_FREQUENCY=1500000
 VERBOSE=${VERBOSE:-no}
 
 # The image url to download and customize.
-# shellcheck disable=SC2034
 IMAGE_URL="https://cdimage.ubuntu.com/releases/20.04.3/release/ubuntu-20.04.3-preinstalled-server-arm64+raspi.img.xz"
 
 # The partition number of the rootfs. Partition number starts at 0.
 # TODO: This should always be the last partition, otherwise resize won't work.
 # Need the resize because the default image has a very small paritition whereas
 # ROS is big and we need to add some temporary files.
-# shellcheck disable=SC2034
 IMAGE_ROOTFS_PARTITION_NUM=2
 
 # Mount location for the partitions in the image file downloaded from canonical.
-# shellcheck disable=SC2034
 IMAGE_PARTITION_MOUNTS=(
   "/boot/firmware"
   "/"
@@ -46,11 +44,9 @@ IMAGE_PARTITION_MOUNTS=(
 
 # This is passed to truncate --size=$IMAGE_SIZE when operating against the .img file.
 # TODO: Note that always the last partition will be expanded as I just call truncate for now.
-# shellcheck disable=SC2034
 IMAGE_SIZE=4G
 
 # Absolute path of the output image on the host.
-# shellcheck disable=SC2034
 OUTPUT_FILENAME=$(pwd)/out/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img
 
 # Absolute to the location of the rootfs on the host that will be copied into
@@ -58,7 +54,6 @@ OUTPUT_FILENAME=$(pwd)/out/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img
 #
 # Note: This is in rsync format, so must have a trailing slash if you want to
 # actually merge the content into the rootfs and not create another subdirectory.
-# shellcheck disable=SC2034
 ROOTFS_OVERLAY=${curdir}/rootfs/
 
 #################
@@ -74,12 +69,10 @@ ROOTFS_OVERLAY=${curdir}/rootfs/
 # Phase 1 is generally for fetching prebuilt binaries and copying them into the
 # chroot. Basically any files that cannot be put in the ROOTFS_OVERLAY should
 # be generated and copied in this step.
-# shellcheck disable=SC2034
 SETUP_PHASE1_OUTSIDE_CHROOT=${curdir}/phase1-outside.sh
 
 # Phase 2 is generally for cross compiling (such as via CMake), because the
 # rootfs should already be setup with all the dependencies at this point.
-# shellcheck disable=SC2034
 # SETUP_PHASE2_OUTSIDE_CHROOT=$(pwd)/phase2-outside.sh # don't need it for this
 
 # Chroot-side setup scripts #
@@ -96,12 +89,10 @@ SETUP_PHASE1_INSIDE_CHROOT=/setup/phase1.sh
 
 # Phase 2 is for removing files in the chroot that are placed to help with the
 # setup of the image.
-# shellcheck disable=SC2034
 SETUP_PHASE2_INSIDE_CHROOT=/setup/phase2.sh
 
 # Path to qemu-user-static on the host, which will be copied into the chroot to
 # the same path.
-# shellcheck disable=SC2034
 QEMU_USER_STATIC_PATH=/usr/bin/qemu-aarch64-static
 
 # Uncomment and change this if you want the builder to pause after a particular
@@ -120,13 +111,13 @@ QEMU_USER_STATIC_PATH=/usr/bin/qemu-aarch64-static
 #
 # Verification can be optionally performed, such as with sha256sum.
 custom_extract_image() {
-  xzcat --decompress $1
+  xzcat --decompress "$1"
 }
 
 # Each image may be slightly different, but maybe we can put this code directly in core.sh.
 custom_loop_device_setup() {
   local loop_device=$1
 
-  e2fsck -y -f ${loop_device}p2
-  resize2fs ${loop_device}p2
+  e2fsck -y -f "${loop_device}"p2
+  resize2fs "${loop_device}"p2
 }
