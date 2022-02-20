@@ -1,3 +1,5 @@
+#!/bin/bash
+
 download_and_extract_image_if_necessary() {
   if [ ! -f $DOWNLOAD_CACHE_PATH ]; then
     wget --progress=dot -e dotbytes=10M -O $DOWNLOAD_CACHE_PATH $IMAGE_URL
@@ -5,7 +7,7 @@ download_and_extract_image_if_necessary() {
     log_in_step "already downloaded image, so only extracting it"
   fi
 
-  mkdir -p $(dirname $OUTPUT_FILENAME)
+  mkdir -p "$(dirname $OUTPUT_FILENAME)"
   log_in_step "extracting $(basename $DOWNLOAD_CACHE_PATH) into $OUTPUT_FILENAME"
   custom_extract_image $DOWNLOAD_CACHE_PATH | pv > $OUTPUT_FILENAME
 }
@@ -14,7 +16,8 @@ setup_loop_device_and_mount_partitions() {
   log_in_step "expanding image to $IMAGE_SIZE with truncate"
   truncate -s $IMAGE_SIZE $OUTPUT_FILENAME
 
-  local partition_end_in_mb=$(parted $OUTPUT_FILENAME print | grep $(basename $OUTPUT_FILENAME) | cut -f 2 -d ":" | grep -o '[0-9]\+')
+  local partition_end_in_mb
+  partition_end_in_mb=$(parted $OUTPUT_FILENAME print | grep "$(basename $OUTPUT_FILENAME)" | cut -f 2 -d ":" | grep -o '[0-9]\+')
   log_in_step "growing partition ${IMAGE_ROOTFS_PARTITION_NUM} to end at ${partition_end_in_mb}MB"
   parted $OUTPUT_FILENAME resizepart ${IMAGE_ROOTFS_PARTITION_NUM} ${partition_end_in_mb}
 
@@ -137,4 +140,3 @@ umount_everything() {
   umount -R $CHROOT_PATH
   losetup -d $g_loop_device
 }
-
