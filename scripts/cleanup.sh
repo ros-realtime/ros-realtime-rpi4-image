@@ -14,7 +14,7 @@ set -x
 sudo umount -R $CHROOT_PATH
 
 if [ -f "${CACHE_DIR}/session-loop-device.txt" ]; then
-  sudo losetup -d $(cat "${CACHE_DIR}/session-loop-device.txt")
+  sudo losetup -d "$(cat ${CACHE_DIR}/session-loop-device.txt)"
 fi
 
 sudo rm ${CACHE_DIR}/session.txt
