@@ -1,3 +1,6 @@
+#!/bin/bash
+# shellcheck disable=SC2034
+
 # pwd should always be the root of this repository when builder/main.sh is called.
 curdir=$(pwd)/focal-rt-ros2
 
@@ -108,14 +111,13 @@ QEMU_USER_STATIC_PATH=/usr/bin/qemu-aarch64-static
 #
 # Verification can be optionally performed, such as with sha256sum.
 custom_extract_image() {
-  xzcat --decompress $1
+  xzcat --decompress "$1"
 }
 
 # Each image may be slightly different, but maybe we can put this code directly in core.sh.
 custom_loop_device_setup() {
   local loop_device=$1
 
-  e2fsck -y -f ${loop_device}p2
-  resize2fs ${loop_device}p2
+  e2fsck -y -f "${loop_device}"p2
+  resize2fs "${loop_device}"p2
 }
-

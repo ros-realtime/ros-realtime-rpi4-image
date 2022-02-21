@@ -12,16 +12,23 @@ if [ ! -f "$VARS_SH" ]; then
 fi
 
 # CACHE_DIR is exported so the user-defined phase1/2 scripts can use it.
-export CACHE_DIR=$(readlink -f "$CURDIR/../cache")
+export CACHE_DIR
+CACHE_DIR=$(readlink -f "$CURDIR/../cache")
+# shellcheck disable=SC2034
 SESSION_FILE=${CACHE_DIR}/session.txt
+# shellcheck disable=SC2034
 SESSION_LOOP_DEVICE_FILE=${CACHE_DIR}/session-loop-device.txt
 
+# shellcheck disable=SC1090
 source ${CURDIR}/utils.sh
+# shellcheck disable=SC1090
 source ${CURDIR}/core.sh
+# shellcheck disable=SC1090
 source ${VARS_SH}
 
 # CHROOT_PATH is exported so the user-defined phase1/2 scripts can use it.
 export CHROOT_PATH=${CHROOT_PATH:-/tmp/rpi4-image-build} # TODO: change this path to something more generic
+# shellcheck disable=SC2034
 DOWNLOAD_CACHE_PATH="$CACHE_DIR/$(basename ${IMAGE_URL})"
 NAMESERVER=${NAMESERVER:-1.1.1.1}
 
