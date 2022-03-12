@@ -39,7 +39,6 @@ This is a custom image builder for the Raspberry Pi 4. Some features:
 
 ### Todos
 
-- [ ] Setup /etc/security/limits.conf (or maybe limits.conf.d)
 - [ ] Optionally configure isolcpus and nohz_full for the kernel.
 - [ ] Fix the issue with `LINUX_RT_VERSION` and `LINUX_RT_VERSION_ACTUALLY` (see `vars.sh`).
 - [ ] Use a sha256 checksum to ensure downloaded image and kernel are "secure".
