@@ -1,0 +1,3 @@
+#!/bin/bash
+
+# At this point in time, the rootfs at CHROOT_PATH should be fully setup and usable as a cross compile toolchain sysroot.
