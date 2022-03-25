@@ -5,6 +5,10 @@ from image_builder.builder import Builder
 
 logging.basicConfig(format="[%(asctime)s][%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
-b = Builder(["focal-rt-ros2"])
+b = Builder([
+  "focal-rt",
+  "focal-rt-galactic",
+])
+
 b.build()
 

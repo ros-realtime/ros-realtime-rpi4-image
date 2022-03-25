@@ -49,14 +49,6 @@ apt remove -y unattended-upgrades
 
 # TODO: If specified, create an image with isolcpus already setup.
 
-# Setup ROS distro and ROS
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
-sudo apt-get update
-sudo apt-get install -y ros-galactic-ros-base
-
-# Install some misc packages
-apt-get install -y cpufrequtils libraspberrypi-bin rt-tests cpuset stress stress-ng
-
 # clean up to reduce image size
 apt-get clean
 rm -rf /var/lib/apt/lists/*

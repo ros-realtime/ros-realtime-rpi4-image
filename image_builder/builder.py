@@ -300,6 +300,8 @@ class Builder(object):
     self._check_pause(step)
 
   def _parse_config(self, filename: str) -> tuple[dict, dict]:
+    if not os.path.isfile(filename):
+      raise FileNotFoundError("Cannot find file {}".format(filename))
     config = configparser.ConfigParser()
     # Preserve case sensitivity for configuration keys so that environment variables are properly exported.
     config.optionxform = str
