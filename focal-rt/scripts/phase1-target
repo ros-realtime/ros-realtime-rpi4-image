@@ -1,11 +1,6 @@
 #!/bin/bash
 
 set -e -o pipefail
-
-# This is the vars.sh file copied into the container, so we can get some custom
-# variables here (such as LINUX_RT_VERSION).
-source /vars.sh
-
 echo "PINNED_CPU_FREQUENCY=${PINNED_CPU_FREQUENCY}" > /etc/default/cpu-frequency
 
 export DEBIAN_FRONTEND=noninteractive
@@ -34,6 +29,7 @@ apt-get purge --autoremove -y \
 # Setting up PREEMPT_RT kernel
 cd /setup
 sudo dpkg -i linux-*.deb
+rm linux-*.deb
 
 ln -s -f /boot/vmlinuz-${LINUX_RT_VERSION_ACTUALLY} /boot/vmlinuz
 ln -s -f /boot/initrd.img-${LINUX_RT_VERSION_ACTUALLY} /boot/initrd.img
@@ -48,19 +44,10 @@ cp /boot/initrd.img /boot/firmware/initrd.img.bak
 systemctl disable ondemand
 systemctl enable cpu-frequency
 
-
 # Disable unattended-upgrades
 apt remove -y unattended-upgrades
 
 # TODO: If specified, create an image with isolcpus already setup.
-
-# Setup ROS distro and ROS
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
-sudo apt-get update
-sudo apt-get install -y ros-galactic-ros-base
-
-# Install some misc packages
-apt-get install -y cpufrequtils libraspberrypi-bin rt-tests cpuset stress stress-ng
 
 # clean up to reduce image size
 apt-get clean

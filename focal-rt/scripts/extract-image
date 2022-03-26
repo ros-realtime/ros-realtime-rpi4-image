@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -xe
+
+# This script extract the image downloaded from the image_url specified in
+# config.ini. The script should be tailored to the image download.
+#
+# The script is called with only one argument: the path to the file downloaded.
+# The script should output the decompressed output into stdout, so it can be
+# redirected into a file by the build system.
+exec xzcat --decompress "$1"
