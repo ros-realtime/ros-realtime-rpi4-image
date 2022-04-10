@@ -18,7 +18,7 @@ rm linux*dbg*.deb
 ls -l
 
 # These deb files will be installed by the phase1 script.
-# The /setup folder in the chroot will be deleted by phase2 script
+# The /setup folder in the chroot is setup by the builder.
 cp linux-*.deb $CHROOT_PATH/setup/
 rm linux-*.deb
 
