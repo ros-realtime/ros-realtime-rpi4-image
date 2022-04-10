@@ -18,10 +18,15 @@ changes:
     with:
       filters: |
         check-changes:
-          - 'builder/**''
+          - 'image_builder/**''
+          - 'focal-rt/**'
+          - 'focal-rt-galactic/**'
           - 'scripts/**'
-          - 'focal-rt-ros2/**'
           - 'Makefile'
+          - 'build.py'
+          - '.github/workflows/build.sh'
+          - '.github/workflows/setup-dependencies.sh'
+          - '.github/workflows/build.yml'
   build-image:
     needs: changes
     runs-on: ubuntu-latest
