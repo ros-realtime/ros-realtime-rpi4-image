@@ -1,12 +1,36 @@
 name: Build image
-on: 
+on:
   push:
     branches:
       - master
 
 jobs:
+# JOB to run change detection
+changes:
+  runs-on: ubuntu-latest
+  # Set job outputs to values from filter step
+  outputs:
+    check-changes: ${{ steps.filter.outputs.check-changes }}
+  steps:
+  # For pull requests it's not necessary to checkout the code
+  - uses: dorny/paths-filter@v2
+    id: filter
+    with:
+      filters: |
+        check-changes:
+          - 'image_builder/**''
+          - 'focal-rt/**'
+          - 'focal-rt-galactic/**'
+          - 'scripts/**'
+          - 'Makefile'
+          - 'build.py'
+          - '.github/workflows/build.sh'
+          - '.github/workflows/setup-dependencies.sh'
+          - '.github/workflows/build.yml'
   build-image:
+    needs: changes
     runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.check-changes == 'true' }}
     steps:
       - uses: actions/checkout@v2
 
