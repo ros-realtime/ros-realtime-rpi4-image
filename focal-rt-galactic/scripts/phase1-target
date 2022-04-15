@@ -8,9 +8,6 @@ sudo apt-get install -y ros-$ROS_DISTRO-ros-base
 # Install some misc packages
 apt-get install -y cpufrequtils libraspberrypi-bin rt-tests cpuset stress stress-ng
 
-# Remove multipath-tools, see: https://github.com/ros-realtime/ros-realtime-rpi4-image/issues/30
-apt-get purge -y multipath-tools
-
 # clean up to reduce image size
 apt-get clean
 rm -rf /var/lib/apt/lists/*
