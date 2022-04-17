@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+import argparse
+import logging
+import subprocess
+import os
+import sys
+
+from image_builder.builder import Builder
+
+logging.basicConfig(format="[%(asctime)s][%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
+
+# b = Builder([
+#   "focal-rt",
+#   "focal-rt-galactic",
+# ])
+#
+# b.build()
+
+
+def parse_arguments():
+  parser = argparse.ArgumentParser(
+    description="ROS + RT Raspberry Pi 4 image builder"
+  )
+
+  parser.add_argument(
+    "-o",
+    "--out-dir",
+    default="out",
+    help="The directory in which to place the built image. Default: out",
+  )
+
+  parser.add_argument(
+    "--cache-dir",
+    default="cache",
+    help="The directory in which to place to cached artifacts, like the downloaded base image. Default: cache",
+  )
+
+  parser.add_argument(
+    "--chroot-path",
+    default="/tmp/rpi4-image-build",
+    help="The path the OS image will be mounted and chrooted at. Default: /tmp/rpi4-image-build"
+  )
+
+  subparsers = parser.add_subparsers(dest="action")
+  subparsers.required = True
+
+  build_parser = subparsers.add_parser("build", help="Builds the image")
+
+  build_parser.add_argument(
+    "--pause-after",
+    default=None,
+    choices=[
+      "download_and_extract_image_if_necessary",
+      "setup_loop_device_and_mount_partitions",
+      "prepare_chroot",
+      "copy_files_to_chroot",
+      "run_phase1_host_scripts",
+      "run_phase1_target_scripts",
+      "run_phase2_host_scripts",
+      "run_phase2_target_scripts",
+      "cleanup_chroot",
+      "umount_everything",
+    ],
+    help="Pause after a particular build stage. Default: None (will not pause)",
+  )
+
+  build_parser.add_argument(
+    "profiles",
+    type=str,
+    nargs="*",
+    default=["focal-rt", "focal-rt-galactic"],
+    help="The profiles to be built. The order is how they will overlay each other. Default: focal-rt, focal-rt-galactic"
+  )
+
+  subparsers.add_parser("teardown", help="Reset the ongoing session (if any) and unmount the mounted image and teardown the loop device (if required)")
+  subparsers.add_parser("chroot", help="Enters the chroot_path if possible")
+
+  # Convert the action into a callable function.
+  args = parser.parse_args()
+  args.action = globals()[args.action]
+  return args
+
+
+def build(args):
+  builder = Builder(
+    profile_dirs=args.profiles,
+    cache_dir=args.cache_dir,
+    out_dir=args.out_dir,
+    chroot_path=args.chroot_path,
+    pause_after=args.pause_after
+  )
+
+  builder.build()
+
+
+def teardown(args):
+  # TODO: refactor Builder such that it supports lazy initialization of the
+  # profile directories, so that code from here and from clean can be reused.
+
+  session_file = os.path.join(args.cache_dir, "session.txt")
+  session_loop_device_file = os.path.join(args.cache_dir, "loop-device.txt")
+
+  if os.path.isfile(session_loop_device_file):
+    with open(session_loop_device_file) as f:
+      loop_device = f.read().strip()
+  else:
+    loop_device = None
+
+  logging.info(f"Unmounting {args.chroot_path}")
+  subprocess.run(["umount", "-R", args.chroot_path])
+
+  if loop_device is not None:
+    logging.info(f"detaching loop device {loop_device}")
+    subprocess.run(["losetup", "-d", loop_device])
+    os.remove(session_loop_device_file)
+  else:
+    logging.info(f"loop device not found in {session_loop_device_file}, so not detaching...")
+
+  if os.path.isfile(session_file):
+    logging.info(f"removing session file {session_file}")
+    os.remove(session_file)
+  else:
+    logging.info(f"session file {session_file} not found, not removing...")
+
+
+def chroot(args):
+  if not os.path.isdir(args.chroot_path):
+    logging.error(f"cannot chroot into {args.chroot_path} as it doesn't exist")
+    sys.exit(1)
+
+  subprocess.run(["systemd-nspawn", "-D", args.chroot_path, "bash"])
+
+
+def main():
+  args = parse_arguments()
+  args.action(args)
+
+
+if __name__ == "__main__":
+  main()
