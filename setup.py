@@ -9,4 +9,8 @@ setup(
   url="https://github.com/ros-realtime/ros-realtime-rpi4-image",
   packages=["image_builder"],
   scripts=["./build-ros-rt-img"],
+  package_data={
+    "": ["data/*"],
+  },
+  include_package_data=True,
 )

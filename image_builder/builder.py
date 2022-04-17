@@ -47,6 +47,15 @@ class Builder(object):
     self.profile_dirs = profile_dirs
 
     for profile_dir in profile_dirs:
+      if not os.path.isdir(profile_dir):
+        builtin_profile_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "data", profile_dir)
+        if not os.path.isdir(builtin_profile_dir):
+          raise RequirementNotMetError(f"Cannot find {profile_dir}")
+
+        profile_dir = builtin_profile_dir
+
+      self.logger.debug(f"Found profile {profile_dir}")
+
       # Merge configuration
       build_vars, env_vars = self._parse_config(os.path.join(profile_dir, "config.ini"))
       self.build_vars.update(build_vars)
