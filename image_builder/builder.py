@@ -7,7 +7,7 @@ import os
 import os.path
 import shutil
 import subprocess
-from typing import Callable
+from typing import Callable, Union
 
 
 class RequirementNotMetError(RuntimeError):
@@ -19,12 +19,15 @@ class Builder(object):
                profile_dirs: Sequence[str],
                cache_dir: str = "cache",
                out_dir: str = "out",
-               chroot_path: str = "/tmp/rpi4-image-build"):
+               chroot_path: str = "/tmp/rpi4-image-build",
+               pause_after: Union[str, None] = None):
     self.logger = logging.getLogger("builder")
 
     self.cache_dir = cache_dir
     self.out_dir = out_dir
     self.chroot_path = chroot_path
+    self.pause_after = pause_after
+
     self.session_file = os.path.join(self.cache_dir, "session.txt")
     self.session_loop_device_file = os.path.join(self.cache_dir, "loop-device.txt")
 
@@ -47,6 +50,15 @@ class Builder(object):
     self.profile_dirs = profile_dirs
 
     for profile_dir in profile_dirs:
+      if not os.path.isdir(profile_dir):
+        builtin_profile_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "data", profile_dir)
+        if not os.path.isdir(builtin_profile_dir):
+          raise RequirementNotMetError(f"Cannot find {profile_dir}")
+
+        profile_dir = builtin_profile_dir
+
+      self.logger.debug(f"Found profile {profile_dir}")
+
       # Merge configuration
       build_vars, env_vars = self._parse_config(os.path.join(profile_dir, "config.ini"))
       self.build_vars.update(build_vars)
@@ -344,7 +356,7 @@ class Builder(object):
       self.logger.info(f"phase2 target: {script}")
 
   def _check_pause(self, step: str):
-    if self.build_vars.get("pause_after") == step:
+    if self.pause_after == step:
       self.logger.warn(f"pausing after {step} as it is configured via the build var pause_after")
       print("Continue? [y/N] ", end="")
       if input().lower() != "y":

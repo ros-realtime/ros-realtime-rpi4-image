@@ -20,15 +20,13 @@ jobs:
         filters: |
           check-changes:
             - 'image_builder/**'
-            - 'focal-rt/**'
-            - 'focal-rt-galactic/**'
             - 'scripts/**'
             - 'Makefile'
-            - 'build.py'
+            - 'ros-rt-img'
             - '.github/workflows/build.sh'
             - '.github/workflows/setup-dependencies.sh'
             - '.github/workflows/build.yml'
-  
+
   build-image:
     needs: changes
     runs-on: ubuntu-latest
