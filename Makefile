@@ -6,4 +6,5 @@ focal-rt-ros2:
 	sudo ./ros-rt-img build
 
 clean:
+	sudo ./ros-rt-img teardown
 	sudo rm -rf out cache
