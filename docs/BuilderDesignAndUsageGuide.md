@@ -74,7 +74,6 @@ A full example of this directory can be seen in [`focal-rt`](../focal-rt).
 This file specifies the build profile under the section `[build]`. This section
 contains the following variables:
 
-- `debug`: boolean. If true, verbose logging will be turned on.
 - `image_url`: string. The URL of the image to be downloaded by the builder.
 - `image_mounts`: string. A comma separated list of the partition's mount
   point. Mounting occurs in the reverse order by the builder, because usually
@@ -126,9 +125,9 @@ Pause and resume
 ----------------
 
 The builder can pause after each step defined in the code (see
-`Builder.build()`). If a step fails, the builder won't cleanup anything to give
-the developer a chance to debug and fix things manually before continuing. The
-way this works is with two files:
+`Builder.build()` and `./ros-rt-img build --pause-after`). If a step fails, the
+builder won't cleanup anything to give the developer a chance to debug and fix
+things manually before continuing. The way this works is with two files:
 
 - `cache/session.txt`: contains a list of steps executed, one per line. You can
   freely change this file if you know what you're doing to selectively
