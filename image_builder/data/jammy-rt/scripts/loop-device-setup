@@ -1,0 +1,8 @@
+#!/bin/bash
+loop_device=$1
+
+set -xe
+
+# The image should always be using the second partition
+e2fsck -y -f "${loop_device}"p2
+resize2fs "${loop_device}"p2
