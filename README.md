@@ -73,14 +73,11 @@ $ sudo apt install parted pv rsync wget systemd-container qemu-user-static make 
 
 ### To run
 
-```
-$ make focal-rt-ros2
-```
-
-This will build the image to `build/ubuntu-20.04.3-rt-ros2-galactic-arm64+raspi.img`. 
-You can then `dd` this to a SD card.
-
-You can see a demo of this in [CI](https://github.com/shuhaowu/ros-realtime-rpi4-image/actions). CI builds quite slowly. On my computer this whole process only takes a few minutes.
+1. Build the image
+  - To build the Ubuntu 22.04 + ROS Humble image: `make jammy-rt-ros2`.
+  - To build the Ubuntu 20.04 + ROS Galactic image: `make focal-rt-ros2`.
+2. Take the image in the `out` folder and `dd` it into an SD card (or flash it
+   in another way).
 
 Customization guide
 -------------------

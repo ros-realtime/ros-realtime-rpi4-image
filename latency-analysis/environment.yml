@@ -1,0 +1,8 @@
+name: ros-rt-analysis
+channels:
+  - defaults
+dependencies:
+  - jupyterlab
+  - matplotlib
+  - numpy
+  - python
