@@ -5,12 +5,17 @@ echo "PINNED_CPU_FREQUENCY=${PINNED_CPU_FREQUENCY}" > /etc/default/cpu-frequency
 
 export DEBIAN_FRONTEND=noninteractive
 
+# Setting up PREEMPT_RT kernel
+cd /setup
+dpkg -i linux-*.deb
+rm linux-*.deb
+
 # Remove some packages that are likely not needed:
 # - snapd: no one packages their robot apps with snap, right?
 # - fwupd: I don't think we need to update devices firmware like a logitech mouse, and it also uses like 20MB of RAM...
 # - cryptsetup: don't need to setup disk encryption. Also, causes build failures on some host system configurations.
 # - mdadm: don't need to setup raid.
-# - Stock linux kernel: for obvious reasons
+# - Stock linux kernel: for obvious reasons.
 apt-get purge --autoremove -y \
   cryptsetup \
   fwupd \
@@ -26,19 +31,31 @@ apt-get purge --autoremove -y \
   btrfs-progs \
   xfsprogs
 
-# Setting up PREEMPT_RT kernel
-cd /setup
-sudo dpkg -i linux-*.deb
-rm linux-*.deb
+# TODO: Even tho
+# https://github.com/ros-realtime/linux-real-time-kernel-builder/pull/32 is
+# merged, this is still needed somehow... I suspect that flash-kernel is no
+# longer being called due to some changes upstream? Not sure.
+ln -s -f /boot/vmlinuz-${LINUX_RT_VERSION}-raspi /boot/vmlinuz
+ln -s -f /boot/initrd.img-${LINUX_RT_VERSION}-raspi /boot/initrd.img
 
-ln -s -f /boot/vmlinuz-${LINUX_RT_VERSION_ACTUALLY} /boot/vmlinuz
-ln -s -f /boot/initrd.img-${LINUX_RT_VERSION_ACTUALLY} /boot/initrd.img
-
-# TODO: This should be removable following https://github.com/ros-realtime/linux-real-time-kernel-builder/pull/32
 cp /boot/vmlinuz /boot/firmware/vmlinuz
-cp /boot/vmlinuz /boot/firmware/vmlinuz.bak
 cp /boot/initrd.img /boot/firmware/initrd.img
-cp /boot/initrd.img /boot/firmware/initrd.img.bak
+
+# Check to make sure that the kernel booted will be the RT kernel, not the
+# regular kernel. It is possible that the base image changed the kernel version
+# and STOCK_LINUX_VERSION is not updated here, which may result cause an error
+# here. If that happens, the STOCK_LINUX_VERSION must be updated. It is also
+# possible for something else to break this, in which case more investigations
+# would be needed.
+if [ "$(md5sum /boot/firmware/vmlinuz | cut -f 1 -d ' ')" != "$(md5sum /boot/vmlinuz-${LINUX_RT_VERSION}-raspi | cut -f 1 -d ' ')" ]; then
+  echo "ERROR: /boot/firmware/vmlinuz is not using the RT version, something is wrong with the build..."
+  exit 1
+fi
+
+if [ "$(md5sum /boot/firmware/initrd.img | cut -f 1 -d ' ')" != "$(md5sum /boot/initrd.img-${LINUX_RT_VERSION}-raspi | cut -f 1 -d ' ')" ]; then
+  echo "ERROR: /boot/firmware/initrd.img is not using the RT version, something is wrong with the build..."
+  exit 1
+fi
 
 # Disable ondemand govenor and set constant frequency
 systemctl disable ondemand
