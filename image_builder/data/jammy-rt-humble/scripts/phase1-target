@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Setup ROS distro and ROS
-curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
+curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
 apt-get update
 apt-get install -y ros-$ROS_DISTRO-ros-base
 
