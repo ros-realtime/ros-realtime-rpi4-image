@@ -8,9 +8,27 @@ The scripts here are used to test and analyze the scheduling latency of each Ras
 
 To run cyclictest, run the `run_latency_experiment.sh` shell script on the Raspberry Pi 4. This will need PASSWORD-LESS sudo to both install a few small packages as well as to obtain priviledges for RT scheduling. This will spawn a `tmux` window where a CPU stress test is happening at the same time as a cyclictest run [^1]. 
 
-Once the test is done (defaults to 2 hours), a file named something like `22.04_5.15.39-rt42-raspi.log` will be created in the `data` directory. You then need to use the Jupyter notebook to draw the latency plot.
+Once the test is done (defaults to 2 hours), a file named something like `22.04_5.15.39-rt42-raspi.log` will be created in the `data` directory. You can use either Jupyter notebook or a command line utility to draw the plot.
 
-To do this, make sure you installed `jupyterlab` and `numpy`. Then, in this directory, simply run `jupyter lab` and open [`analysis.ipynb`](./analysis.ipynb). One way to install `jupyterlab` maybe via [miniconda](https://docs.conda.io/en/latest/miniconda.html) and using the `environment.yml` file provided here.
+### Command-line utility
+
+You'll need the dependencies shown in `requirements.txt` to be installed. The simplest way to do this is to install via the system package manager, as `matplotlib` frequently needs to link to a system-level GUI toolkit. To do this:
+
+```
+$ sudo apt install python3-matplotlib python3-numpy
+```
+
+Once this is done, simply run:
+
+```
+$ python3 cyclictest_latency_plotter.py data/20.04_5.4.195-rt74-raspi.log data/22.04_5.15.39-rt42-raspi.log
+```
+
+You can pass in one or more files, and the plotter will draw them over top of each other.
+
+### Jupyter lab:
+
+To use Jupyter lab, make sure you installed `jupyterlab` and `numpy`. Then, in this directory, simply run `jupyter lab` and open [`analysis.ipynb`](./analysis.ipynb). One way to install `jupyterlab` maybe via [miniconda](https://docs.conda.io/en/latest/miniconda.html) and using the `environment.yml` file provided here.
 
 Once Jupyter lab is loaded, simply tweak the Python source code and run it to get the plots. The existing notebook should automatically save a PNG to the `data` directory. This can be committed into the repo for a permanent record. 
 

@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os.path
 import re
+import sys
 
 def hist_to_numbers(line):
   for i, v in enumerate(line):
@@ -92,3 +94,26 @@ def plot_latency_hist(datas, ax=None, xlim=(0, 500)):
   ax.set_ylabel("Count")
   ax.grid()
   ax.legend(handles=lines)
+
+def main():
+  import matplotlib
+  matplotlib.rcParams['font.family'] = 'Times New Roman'
+  matplotlib.rcParams['mathtext.fontset'] = 'stix'
+  matplotlib.rcParams['font.size'] = 12
+  matplotlib.rcParams['figure.dpi'] = 200
+  matplotlib.rcParams['savefig.dpi'] = 200
+
+  datas = []
+  for file in sys.argv[1:]:
+    # style=None for automatic style
+    data = load_latency_hist(file, label=os.path.splitext(os.path.basename(file))[0], style="")
+    datas.append(data)
+
+  fig = plt.figure()
+  ax = fig.add_subplot(1, 1, 1)
+  plot_latency_hist(datas, ax, xlim=[0, 400])
+  fig.tight_layout()
+  plt.show()
+
+if __name__ == "__main__":
+  main()
