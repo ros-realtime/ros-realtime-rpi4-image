@@ -2,7 +2,7 @@
 
 set -xe
 
-make
+make $1
 sudo chown -R $(id -u):$(id -g) out
 
 echo "Before compression:"
