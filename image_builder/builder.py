@@ -16,6 +16,7 @@ class RequirementNotMetError(RuntimeError):
 
 LOOP_DEVICE_FILENAME = "loop-device.txt"
 DEFAULT_CHROOT_PATH = "/tmp/rpi4-image-build"
+CMAKE_TOOLCHAIN_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "data", "toolchain.cmake")
 
 
 class Builder(object):
@@ -267,7 +268,7 @@ class Builder(object):
 
   def run_phase2_host_scripts(self):
     for phase2_host_path in self.phase2_host_paths:
-      self._run_script_on_host(phase2_host_path)
+      self._run_script_on_host(phase2_host_path, more_env_vars={"CMAKE_TOOLCHAIN_FILE": CMAKE_TOOLCHAIN_FILE})
 
   def run_phase2_target_scripts(self):
     for phase2_target_path in self.phase2_target_paths:
@@ -381,10 +382,11 @@ class Builder(object):
     os.chmod(self.session_loop_device_file, 0o666)
     self._loop_device = loop_device
 
-  def _run_script_on_host(self, args: Sequence[str]|str, shell: bool = False):
+  def _run_script_on_host(self, args: Sequence[str]|str, shell: bool = False, more_env_vars: dict = {}):
     self.logger.debug(f"running {args} with env {self.env_vars}")
     env_vars = os.environ.copy() # So PATH still works...
     env_vars.update(self.env_vars)
+    env_vars.update(more_env_vars)
     if shell:
       # If there are pipe, it might mask a failure without pipefail.
       cmd = ["/bin/bash", "-o", "pipefail", "-c", args]

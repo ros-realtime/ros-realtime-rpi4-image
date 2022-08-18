@@ -79,6 +79,75 @@ $ sudo apt install parted pv rsync wget systemd-container qemu-user-static make 
 2. Take the image in the `out` folder and `dd` it into an SD card (or flash it
    in another way).
 
+### Cross compilation
+
+There are two ways to use cross-compilation with this system:
+
+1. In the image build process, cross-compile and install some applications
+   (_phase2 cross-compile_). See the [customization guide for more
+   details](docs/BuilderDesignAndUsageGuide.md).
+2. After the image is built, re-mount it and then cross-compile other projects
+   in an adhoc/interactive manner (_interactive cross-compile_). This section
+   talks about this use case.
+
+
+To cross compile, you'll need to install this builder on the host machine via setuptools:
+
+```
+[host]$ sudo python3 setup.py install
+```
+
+Make sure the built image is mounted by running the following command in the
+same directory where you built the image. This will also create a file called
+`cache/loop-device.txt` that records which loop device is used to mount the
+image.
+
+```
+[host]$ sudo ros-rt-img mount out/ubuntu-22.04.1-rt-ros2-arm64+raspi.img
+```
+
+This will mount the image at `/tmp/rpi4-image-build`. At this point, you might
+need to install dependencies into this image before you can build and link your
+application. To do this, first enter the container:
+
+```
+[host]$ sudo ros-rt-img chroot
+```
+
+Then install any dependencies you want:
+
+```
+[rpi4image]# sudo apt install libboost-dev # An example
+```
+
+Note, this changes the built img file. So either you want to create a backup if
+you want the pristine copy (or alternatively, use the phase2 cross-compile
+instead).
+
+This project provides a [cmake toolchain
+file](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html) and
+its absolute is printed when you run the command `ros-rt-img toolchain`. To use
+this file with cmake, make sure you have the cross-compiler installed on your
+host machine, then configure your project and build via the following commands:
+
+```
+[host]$ sudo apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+[host]$ cd <project path>
+[host]$ cmake -Bbuild -DCMAKE_TOOLCHAIN_FILE=$(ros-rt-img toolchain)
+[host]$ cmake --build build -j $(nproc)
+```
+
+The targets built can then be copied to the Raspberry Pi (via SSH, or other
+means), where it can then run.
+
+To unmount the img, run the following command in the same directory where you
+mounted it originally (where it originally created the `cache/loop-device.txt`
+file):
+
+```
+$ sudo ros-rt-img umount
+```
+
 Customization guide
 -------------------
 

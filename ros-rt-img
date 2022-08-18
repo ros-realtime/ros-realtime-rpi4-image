@@ -6,7 +6,7 @@ import os
 import shutil
 import sys
 
-from image_builder.builder import Builder, LOOP_DEVICE_FILENAME, DEFAULT_CHROOT_PATH
+from image_builder.builder import Builder, LOOP_DEVICE_FILENAME, DEFAULT_CHROOT_PATH, CMAKE_TOOLCHAIN_FILE
 
 logging.basicConfig(format="[%(asctime)s][%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
@@ -74,6 +74,8 @@ def parse_arguments():
 
   subparsers.add_parser("umount", help="unmount an image mounted for interaction via the mount sub-command")
 
+  subparsers.add_parser("toolchain", help="prints the path to the cmake toolchain location")
+
   # Convert the action into a callable function.
   args = parser.parse_args()
   args.action = globals()[args.action]
@@ -97,7 +99,7 @@ def teardown(args):
   # profile directories, so that code from here and from clean can be reused.
 
   session_file = os.path.join(args.cache_dir, "session.txt")
-  session_loop_device_file = os.path.join(args.cache_dir, "loop-device.txt")
+  session_loop_device_file = os.path.join(args.cache_dir, LOOP_DEVICE_FILENAME)
 
   if os.path.isfile(session_loop_device_file):
     with open(session_loop_device_file) as f:
@@ -195,6 +197,11 @@ def umount(args):
       loop_device = f.read().strip()
 
     subprocess.run(["losetup", "-d", loop_device], check=True)
+    os.remove(loop_device_cache_file)
+
+
+def toolchain(args):
+  print(CMAKE_TOOLCHAIN_FILE)
 
 
 def main():
