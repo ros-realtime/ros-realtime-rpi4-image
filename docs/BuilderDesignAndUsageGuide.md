@@ -121,6 +121,45 @@ will then:
   the phase1 host scripts, the builder will run the script from the first
   profile, then the second, then the third, and so on.
 
+### Phase 2 cross-compilation
+
+If you want a custom image with a custom library/application, you can
+cross-compile it in phase2. This is done via a cross compilation toolchain
+installed on the host machine. An example of this is given in
+[`image_builder/data/example-cross-compile`](../image_builder/data/example-cross-compile).
+This is an example profile that can be overlaid ontop of any image and will
+cross-compile and install a C++ project. Please read this profile if you're
+interested in creating your own profile. Most C++ projects will follow a
+similar structure to it:
+
+1. The [`phase1-target`](../image_builder/data/example-cross-compile/scripts/phase1-target)
+   script installs the build and runtime dependency for the
+   project you're trying to cross compile into the target image.
+2. The [`phase2-host`](../image_builder/data/example-cross-compile/scripts/phase2-host)
+   script downloads the C++ project and calls to cmake. The
+   `CMAKE_TOOLCHAIN_FILE` is already passed to this script and points to
+   [`image_builder/data/toolchain.cmake`](../image_builder/data/toolchain.cmake)
+   so you shouldn't need to do anything special.
+
+Note: to run this successfully, you need to install the package
+`gcc-aarch64-linux-gnu g++-aarch64-linux-gnu` on your host system. This is
+because the toolchain file assumes your cross-compiler is at
+`/usr/bin/aarch64-linux-gnu-{gcc,g++}`.
+
+To run the example profile, build an image via the command:
+
+```
+sudo ./ros-rt-img build jammy-rt jammy-rt-humble example-cross-compile
+```
+
+This will install a few executable to the target image that will run on the
+Raspberry Pi.
+
+- `/bin/rt_simple_example`
+- `/bin/rt_message_passing_example`
+- `/bin/rt_mutex_example`
+- `/bin/rt_lttng_ust_example`
+
 Pause and resume
 ----------------
 

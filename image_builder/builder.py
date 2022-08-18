@@ -323,10 +323,14 @@ class Builder(object):
     # Preserve case sensitivity for configuration keys so that environment variables are properly exported.
     config.optionxform = str
     config.read(filename)
-    return (
-      dict(config["build"].items()),
-      dict(config["env"].items()),
-    )
+
+    # env is optional
+    try:
+      env = dict(config["env"].items())
+    except KeyError:
+      env = {}
+
+    return (dict(config["build"].items()), env)
 
   def _log_builder_information(self):
     # TODO: align the key and value to make the build output prettier.

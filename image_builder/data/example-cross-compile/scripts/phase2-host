@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -xe
+
+cd $CACHE_DIR
+
+rm -rf cactus-rt
+git clone https://github.com/cactusdynamics/cactus-rt.git
+cd cactus-rt
+
+# We can just run cmake, because CMAKE_TOOLCHAIN_FILE is already an environment
+# variable for this script only.
+echo $CMAKE_TOOLCHAIN_FILE
+cmake -Bbuild -DBUILD_TESTING=No
+cmake --build build -j $(nproc)
+
+# cmake --install will directly install the code into the image
+cmake --install build
