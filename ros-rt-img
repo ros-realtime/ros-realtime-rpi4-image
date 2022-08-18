@@ -3,9 +3,10 @@ import argparse
 import logging
 import subprocess
 import os
+import shutil
 import sys
 
-from image_builder.builder import Builder
+from image_builder.builder import Builder, LOOP_DEVICE_FILENAME, DEFAULT_CHROOT_PATH
 
 logging.basicConfig(format="[%(asctime)s][%(levelname)s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.DEBUG)
 
@@ -30,7 +31,7 @@ def parse_arguments():
 
   parser.add_argument(
     "--chroot-path",
-    default="/tmp/rpi4-image-build",
+    default=DEFAULT_CHROOT_PATH,
     help="The path the OS image will be mounted and chrooted at. Default: /tmp/rpi4-image-build"
   )
 
@@ -67,6 +68,11 @@ def parse_arguments():
 
   subparsers.add_parser("teardown", help="Reset the ongoing session (if any) and unmount the mounted image and teardown the loop device (if required)")
   subparsers.add_parser("chroot", help="Enters the chroot_path if possible")
+
+  mount_parser = subparsers.add_parser("mount", help="Mount a built image for interactive exploration and/or cross-compilation purposes. only works with Raspberry Pi Ubuntu images.")
+  mount_parser.add_argument("image", type=str, help="The path to the image to be mounted")
+
+  subparsers.add_parser("umount", help="unmount an image mounted for interaction via the mount sub-command")
 
   # Convert the action into a callable function.
   args = parser.parse_args()
@@ -122,6 +128,73 @@ def chroot(args):
     sys.exit(1)
 
   subprocess.run(["systemd-nspawn", "-D", args.chroot_path, "bash"])
+
+
+# TODO: there are some duplication with Builder.prepare_chroot and Builder.setup_loop_device_and_mount_partitions, but different enough that it is duplicated.
+def mount(args):
+  loop_device_cache_file = os.path.join(args.cache_dir, LOOP_DEVICE_FILENAME)
+  if os.path.exists(loop_device_cache_file):
+    logging.error("{} already exists, make sure no other build and mounts are in progress!".format(loop_device_cache_file))
+    sys.exit(1)
+
+  loop_device = subprocess.check_output(["losetup", "-P", "--show", "-f", args.image]).decode("utf-8").strip()
+  with open(loop_device_cache_file, "w") as f:
+    f.write(loop_device)
+
+  logging.info("setting up loop device on {}".format(loop_device))
+
+  os.chmod(loop_device_cache_file, 0o666) # since this script is root, set it to world writable so it can be more easily deleted
+
+  # TODO: this is kind of a hack, as the mount point for each partition is
+  # specified in the image_mounts in the config.ini. It is hard-coded for now
+  # as we assume the raspberry pi Ubuntu layout.
+  for i, mount_point in reversed(list(enumerate(["/boot/firmware", "/"]))):
+    i += 1
+    device_name = f"{loop_device}p{i}"
+    mount_point = os.path.join(args.chroot_path, mount_point.lstrip("/"))
+
+    logging.info("mounting {} to {}".format(device_name, mount_point))
+    subprocess.run(["mount", device_name, mount_point], check=True)
+
+  logging.info("copying resolv.conf and qemu-user-static")
+
+  shutil.move(
+    os.path.join(args.chroot_path, "etc", "resolv.conf"),
+    os.path.join(args.chroot_path, "etc", "resolv.conf.bak")
+  )
+
+  # TODO: also a hack, as qemu_user_static_path in the config.ini, but that's also a hack so...
+  qemu_user_static_path = "/usr/bin/qemu-aarch64-static"
+  shutil.copy(
+    qemu_user_static_path,
+    os.path.join(args.chroot_path, qemu_user_static_path.lstrip("/"))
+  )
+
+  shutil.copy(
+    "/etc/resolv.conf",
+    os.path.join(args.chroot_path, "etc", "resolv.conf")
+  )
+
+
+def umount(args):
+  os.remove(os.path.join(args.chroot_path, "etc", "resolv.conf"))
+  shutil.move(
+    os.path.join(args.chroot_path, "etc", "resolv.conf.bak"),
+    os.path.join(args.chroot_path, "etc", "resolv.conf"),
+  )
+
+  os.remove(os.path.join(args.chroot_path, "usr/bin/qemu-aarch64-static"))
+
+  subprocess.run(["umount", "-R", args.chroot_path], check=True)
+
+  loop_device_cache_file = os.path.join(args.cache_dir, LOOP_DEVICE_FILENAME)
+  if not os.path.exists(loop_device_cache_file):
+    logging.error("failed to detach loop device due to missing loop-device cache file, you'll have to manually call losetup -d")
+  else:
+    with open(loop_device_cache_file) as f:
+      loop_device = f.read().strip()
+
+    subprocess.run(["losetup", "-d", loop_device], check=True)
 
 
 def main():

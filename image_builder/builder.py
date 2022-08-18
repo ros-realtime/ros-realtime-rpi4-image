@@ -14,12 +14,16 @@ class RequirementNotMetError(RuntimeError):
   pass
 
 
+LOOP_DEVICE_FILENAME = "loop-device.txt"
+DEFAULT_CHROOT_PATH = "/tmp/rpi4-image-build"
+
+
 class Builder(object):
   def __init__(self,
                profile_dirs: Sequence[str],
                cache_dir: str = "cache",
                out_dir: str = "out",
-               chroot_path: str = "/tmp/rpi4-image-build",
+               chroot_path: str = DEFAULT_CHROOT_PATH,
                pause_after: Union[str, None] = None):
     self.logger = logging.getLogger("builder")
 
@@ -29,7 +33,7 @@ class Builder(object):
     self.pause_after = pause_after
 
     self.session_file = os.path.join(self.cache_dir, "session.txt")
-    self.session_loop_device_file = os.path.join(self.cache_dir, "loop-device.txt")
+    self.session_loop_device_file = os.path.join(self.cache_dir, LOOP_DEVICE_FILENAME)
 
     self.build_vars = {}
     self.env_vars = {
