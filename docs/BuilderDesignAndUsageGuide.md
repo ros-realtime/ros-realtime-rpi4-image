@@ -134,7 +134,7 @@ similar structure to it:
 
 1. The [`phase1-target`](../image_builder/data/example-cross-compile/scripts/phase1-target)
    script installs the build and runtime dependency for the
-   project you're trying to cross compile into the target image.
+   project you're trying to cross-compile into the target image.
 2. The [`phase2-host`](../image_builder/data/example-cross-compile/scripts/phase2-host)
    script downloads the C++ project and calls to cmake. The
    `CMAKE_TOOLCHAIN_FILE` is already passed to this script and points to
