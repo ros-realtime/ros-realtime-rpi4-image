@@ -127,7 +127,7 @@ If you want a custom image with a custom library/application, you can
 cross-compile it in phase2. This is done via a cross compilation toolchain
 installed on the host machine. An example of this is given in
 [`image_builder/data/example-cross-compile`](../image_builder/data/example-cross-compile).
-This is an example profile that can be overlaid ontop of any image and will
+This is an example profile that can be overlaid on top of any image and will
 cross-compile and install a C++ project. Please read this profile if you're
 interested in creating your own profile. Most C++ projects will follow a
 similar structure to it:
