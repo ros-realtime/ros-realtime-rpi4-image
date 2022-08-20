@@ -91,7 +91,7 @@ There are two ways to use cross-compilation with this system:
    talks about this use case.
 
 
-To cross compile, you'll need to install this builder on the host machine via setuptools:
+To cross-compile, you'll need to install this builder on the host machine via setuptools:
 
 ```
 [host]$ sudo python3 setup.py install
