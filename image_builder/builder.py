@@ -14,12 +14,17 @@ class RequirementNotMetError(RuntimeError):
   pass
 
 
+LOOP_DEVICE_FILENAME = "loop-device.txt"
+DEFAULT_CHROOT_PATH = "/tmp/rpi4-image-build"
+CMAKE_TOOLCHAIN_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), "data", "toolchain.cmake")
+
+
 class Builder(object):
   def __init__(self,
                profile_dirs: Sequence[str],
                cache_dir: str = "cache",
                out_dir: str = "out",
-               chroot_path: str = "/tmp/rpi4-image-build",
+               chroot_path: str = DEFAULT_CHROOT_PATH,
                pause_after: Union[str, None] = None):
     self.logger = logging.getLogger("builder")
 
@@ -29,7 +34,7 @@ class Builder(object):
     self.pause_after = pause_after
 
     self.session_file = os.path.join(self.cache_dir, "session.txt")
-    self.session_loop_device_file = os.path.join(self.cache_dir, "loop-device.txt")
+    self.session_loop_device_file = os.path.join(self.cache_dir, LOOP_DEVICE_FILENAME)
 
     self.build_vars = {}
     self.env_vars = {
@@ -263,7 +268,7 @@ class Builder(object):
 
   def run_phase2_host_scripts(self):
     for phase2_host_path in self.phase2_host_paths:
-      self._run_script_on_host(phase2_host_path)
+      self._run_script_on_host(phase2_host_path, more_env_vars={"CMAKE_TOOLCHAIN_FILE": CMAKE_TOOLCHAIN_FILE})
 
   def run_phase2_target_scripts(self):
     for phase2_target_path in self.phase2_target_paths:
@@ -318,10 +323,14 @@ class Builder(object):
     # Preserve case sensitivity for configuration keys so that environment variables are properly exported.
     config.optionxform = str
     config.read(filename)
-    return (
-      dict(config["build"].items()),
-      dict(config["env"].items()),
-    )
+
+    # env is optional
+    try:
+      env = dict(config["env"].items())
+    except KeyError:
+      env = {}
+
+    return (dict(config["build"].items()), env)
 
   def _log_builder_information(self):
     # TODO: align the key and value to make the build output prettier.
@@ -377,10 +386,11 @@ class Builder(object):
     os.chmod(self.session_loop_device_file, 0o666)
     self._loop_device = loop_device
 
-  def _run_script_on_host(self, args: Sequence[str]|str, shell: bool = False):
+  def _run_script_on_host(self, args: Sequence[str]|str, shell: bool = False, more_env_vars: dict = {}):
     self.logger.debug(f"running {args} with env {self.env_vars}")
     env_vars = os.environ.copy() # So PATH still works...
     env_vars.update(self.env_vars)
+    env_vars.update(more_env_vars)
     if shell:
       # If there are pipe, it might mask a failure without pipefail.
       cmd = ["/bin/bash", "-o", "pipefail", "-c", args]
