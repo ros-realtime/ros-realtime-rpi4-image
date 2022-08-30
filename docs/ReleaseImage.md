@@ -24,13 +24,13 @@ $ ./run_latency_experiment.sh
 7. Copy these files back to your local machine and commit them in the git repo.
 8. Create a PR with these files. Ping for reviews and merge the PR.
 9. Create a tag based on this, named
-   `{ubuntu_version}_v{kernel_version}_ros2_{ros_release}`. The kernel version is An example is:
+   `{ubuntu_version}_v{kernel_version}_ros2_{ros_release}`. The kernel version is an example is:
    `22.04.1_v5.15.39-rt42-raspi_ros2_humble`. The `ubuntu_version` is based on
    the version string of the image we download, and the `kernel_version` is the
    output of `uname -r`.
 10. Push the tag to the repo.
 11. Take the image you built, `xz` it via the command: `cd out; sudo xz -k ubuntu-22.04.1-rt-ros2-arm64+raspi.img`.
-12. [Create a release based on the tag](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases/new). Upload the gzip'ed image. Follow the following template for the release notes:
+12. [Create a release based on the tag](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases/new). Upload the compressed image. Follow the below template for the release notes:
 
 ```
 ROS 2 {ros_release} image for the Raspberry Pi 4 with the real-time kernel (`PREEMPT_RT`).
