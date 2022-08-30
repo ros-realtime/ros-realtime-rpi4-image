@@ -97,7 +97,7 @@ def plot_latency_hist(datas, ax=None, xlim=(0, 500)):
 
 def main():
   import matplotlib
-  matplotlib.rcParams['font.family'] = 'Times New Roman'
+  matplotlib.rcParams['font.family'] = 'stix'
   matplotlib.rcParams['mathtext.fontset'] = 'stix'
   matplotlib.rcParams['font.size'] = 12
   matplotlib.rcParams['figure.dpi'] = 200
@@ -113,6 +113,7 @@ def main():
   ax = fig.add_subplot(1, 1, 1)
   plot_latency_hist(datas, ax, xlim=[0, 400])
   fig.tight_layout()
+  fig.savefig(os.path.splitext(file)[0] + ".png")
   plt.show()
 
 if __name__ == "__main__":
