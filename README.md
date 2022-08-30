@@ -1,24 +1,24 @@
-Raspberry Pi image with ROS2 and the real-time kernel
+Raspberry Pi image with ROS 2 and the real-time kernel
 =====================================================
 
 [![Build image](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml/badge.svg)](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml)
 
-This repo builds a Raspberry Pi 3/4/400 image with ROS2 and the real-time kernel
-pre-installed.  This image can be downloaded directly from [the releases
+This repo builds a Raspberry Pi 4 image with ROS 2 and the real-time kernel
+pre-installed. This image can be downloaded directly from [the releases
 page](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases),
-flashed to a SD card, and booted on a Raspberry Pi 3/4/400.
+flashed to a SD card, and booted on a Raspberry Pi 4.
 
 How to
 ------
 
-Before you start, you need a SD card that is at least 8GB in size.
+Before you start, you need an SD card that is at least 8GB in size.
 
 1. Download the desired image from [the releases page](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases).
 2. The image is compressed with the `xz` compression format. You will need to
    decompress it. On Windows, try using [7-zip](https://www.7-zip.org/) to do
    this if your file archiver doesn't decompress this format already. Once
    decompressed, you should have a file that ends with the extension `.img`.
-    1. On Mac/Linux, use `xz --decompress file.img.xz` in the command line.
+    1. On Mac/GNU-Linux, use `xz --decompress file.img.xz` in the command line.
 3. The easiest way to flash the image is via the [Raspberry Pi imager](https://www.raspberrypi.com/software/). 
     1. Using the Raspberry Pi Image, click `CHOOSE OS`.
     2. Scroll all the way down and click `Use custom`.
@@ -26,7 +26,7 @@ Before you start, you need a SD card that is at least 8GB in size.
     4. Select the storage device.
     5. Click `Write` to flash the image.
     6. Wait for it to be done.
-4. Unplug the SD card and plug it into the Raspberry Pi 3/4/400. Turn on the
+4. Unplug the SD card and plug it into the Raspberry Pi 4. Turn on the
    Raspberry Pi.
 5. The default username is `ubuntu` and the password is `ubuntu`. The default
    hostname is `ubuntu`. You can login either directly on the Raspberry Pi or
@@ -42,7 +42,7 @@ sudo apt install ubuntu-desktop
 sudo apt install ros-humble-desktop
 ```
 
-7. You can now use ROS. To confirm, type `ros2` into the terminal. You should
+7. You can now use ROS 2. To confirm, type `ros2` into the terminal. You should
    see:
 
 ```
@@ -56,8 +56,8 @@ options:
   [...omitted for brevity]
 ```
 
-8. The setup is now complete! 🎉 You can follow the rest of the [ROS2 tutorials
-   here](https://docs.ros.org/en/humble/Tutorials.html).
+8. The setup is now complete!  You can follow the rest of the [ROS 2 tutorials
+   here](https://docs.ros.org/en/rolling/Tutorials.html).
 
 Bonus setup
 -----------
@@ -72,7 +72,7 @@ Bonus setup
 The rest of this README is meant for developers who want to know more about the
 image builder.
 
-Custom Image Builder for the Raspberry Pi for ROS2 + PREEMPT_RT
+Custom Image Builder for the Raspberry Pi for ROS 2 + PREEMPT_RT
 ===============================================================
 
 This is a custom image builder for the Raspberry Pi 4. Some features:
