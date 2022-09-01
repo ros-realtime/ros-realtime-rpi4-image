@@ -61,6 +61,9 @@ fi
 systemctl disable ondemand
 systemctl enable cpu-frequency
 
+# Disable rt-throttling
+systemctl enable rt-throttling
+
 # Disable unattended-upgrades
 apt remove -y unattended-upgrades
 
