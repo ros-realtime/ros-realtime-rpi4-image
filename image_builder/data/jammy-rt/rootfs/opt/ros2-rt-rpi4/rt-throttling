@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo -1 | tee /proc/sys/kernel/sched_rt_runtime_us
