@@ -8,6 +8,9 @@ focal-rt-ros2:
 jammy-rt-ros2:
 	sudo ./ros-rt-img build jammy-rt jammy-rt-humble
 
+jammy-rt-ruediger2:
+	sudo ./ros-rt-img build jammy-rt-humble-ruediger
+
 clean:
 	sudo ./ros-rt-img teardown
 	sudo rm -rf out cache

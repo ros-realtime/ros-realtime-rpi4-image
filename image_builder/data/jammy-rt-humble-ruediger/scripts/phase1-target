@@ -1,0 +1,18 @@
+#!/bin/bash
+
+apt-get update
+
+apt-get install -y ros-$ROS_DISTRO-xacro ros-$ROS_DISTRO-ros2-control ros-$ROS_DISTRO-ros2-controllers libwiringpi-dev
+
+# reverse the network names to eth0 instead of enx<mac-address>
+# this is automatique after a apt-get update
+# https://askubuntu.com/a/1025201
+ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+
+# add library link
+ln -s /home/ruediger/deployement/serial_megapi/lib/serial_megapi/libserial_megapi.so /usr/local/lib/libserial_megapi.so
+ldconfig
+
+# clean up to reduce image size
+apt-get autoremove -y && apt-get clean
+rm -rf /var/lib/apt/lists/*
