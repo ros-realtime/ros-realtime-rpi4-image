@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Setup ROS distro and ROS
+curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
+apt-get update && apt-get upgrade -y
+apt-get install -y ros-$ROS_DISTRO-ros-base
+
+# Install some misc packages
+apt-get install -y cpufrequtils libraspberrypi-bin rt-tests cpuset stress stress-ng
+
+# generate a realtime group
+addgroup realtime
+
+apt-get install -y ros-$ROS_DISTRO-xacro ros-$ROS_DISTRO-robot-state-publisher ros-$ROS_DISTRO-joint-state-publisher ros-$ROS_DISTRO-ros-control ros-$ROS_DISTRO-diff-drive-controller ros-$ROS_DISTRO-robot-localization ros-$ROS_DISTRO-navigation ros-$ROS_DISTRO-map-server ros-$ROS_DISTRO-move-base ros-$ROS_DISTRO-rosserial ros-$ROS_DISTRO-image-transport-plugins ros-$ROS_DISTRO-image-common ros-$ROS_DISTRO-tf2-tools
+
+# reverse the network names to eth0 instead of enx<mac-address>
+# this is automatique after a apt-get update
+# https://askubuntu.com/a/1025201
+ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+
+# Activate ip forward for ipv4
+sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
+
+
+# clean up to reduce image size
+apt-get clean
+rm -rf /var/lib/apt/lists/*

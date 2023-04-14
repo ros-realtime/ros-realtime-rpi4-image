@@ -1,0 +1,49 @@
+# This file contains a netplan-compatible configuration which cloud-init will
+# apply on first-boot (note: it will *not* update the config after the first
+# boot). Please refer to the cloud-init documentation and the netplan reference
+# for full details:
+#
+# https://cloudinit.readthedocs.io/en/latest/topics/network-config.html
+# https://cloudinit.readthedocs.io/en/latest/topics/network-config-format-v2.html
+# https://netplan.io/reference
+#
+# Please note that, at this time, there is no way to specify the wifi
+# regulatory region in the netplan or cloud-init configuration (LP: #1951586),
+# and the /etc/default/crda configuration file has been removed. If you need to
+# specify a regulatory region, append the following to the line in
+# "cmdline.txt" (adjusting "GB" to your own region):
+#
+# cfg80211.ieee80211_regdom=GB
+#
+# Please note that the YAML format employed by this file is sensitive to
+# differences in whitespace; if you are editing this file in an editor (like
+# Notepad) which uses literal tabs, take care to only use spaces for
+# indentation. See the following link for more details:
+#
+# https://en.wikipedia.org/wiki/YAML
+#
+# Some additional examples are commented out below
+
+version: 2
+ethernets:
+  eth0:
+    dhcp4: true
+    addresses:
+      - 192.168.33.78/24
+    optional: true
+#wifis:
+#  wlan0:
+#    dhcp4: true
+#    optional: true
+#    access-points:
+#      myhomewifi:
+#        password: "S3kr1t"
+#      myworkwifi:
+#        password: "correct battery horse staple"
+#      workssid:
+#        auth:
+#          key-management: eap
+#          method: peap
+#          identity: "me@example.com"
+#          password: "passw0rd"
+#          ca-certificate: /etc/my_ca.pem

@@ -4,14 +4,24 @@
 addgroup realtime
 
 # update the apt database and install needed packages
-apt-get update && apt-get upgrade -y
-apt-get install network-manager -y
-apt-get install -y ros-$ROS_DISTRO-xacro ros-$ROS_DISTRO-ros2-control ros-$ROS_DISTRO-ros2-controllers libwiringpi-dev ros-$ROS_DISTRO-navigation2 ros-$ROS_DISTRO-nav2-bringup ros-$ROS_DISTRO-robot-localization ros-$ROS_DISTRO-v4l2-camera ros-$ROS_DISTRO-image-transport-plugins ros-$ROS_DISTRO-image-tools ros-$ROS_DISTRO-image-common
+# apt-get update && apt-get upgrade -y
+# apt-get install network-manager -y
+# apt-get install -y ros-$ROS_DISTRO-xacro ros-$ROS_DISTRO-ros2-control ros-$ROS_DISTRO-ros2-controllers libwiringpi-dev ros-$ROS_DISTRO-navigation2 ros-$ROS_DISTRO-nav2-bringup ros-$ROS_DISTRO-robot-localization ros-$ROS_DISTRO-v4l2-camera ros-$ROS_DISTRO-image-transport-plugins ros-$ROS_DISTRO-image-tools ros-$ROS_DISTRO-image-common
 
 # reverse the network names to eth0 instead of enx<mac-address>
 # this is automatique after a apt-get update
 # https://askubuntu.com/a/1025201
-ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+# ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+
+# Activate ip forward for ipv4
+sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
+
+# link libserial
+ln -s /opt/ruediger2/ruediger2_control/serial_megapi/lib/serial_megapi/libserial_megapi.so /usr/local/lib/libserial_megapi.so
+
+# activate ruediger2 service
+systemctl daemon-reload
+systemctl enable ruediger2.service
 
 # clean up to reduce image size
 apt-get autoremove -y && apt-get clean

@@ -5,6 +5,9 @@
 focal-rt-ros2:
 	sudo ./ros-rt-img build
 
+focal-rt-ruediger:
+	sudo ./ros-rt-img build focal-rt focal-rt-noetic
+
 jammy-rt-ros2:
 	sudo ./ros-rt-img build jammy-rt jammy-rt-humble
 

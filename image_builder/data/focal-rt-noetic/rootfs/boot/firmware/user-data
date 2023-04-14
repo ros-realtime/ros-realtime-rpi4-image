@@ -12,7 +12,7 @@ chpasswd:
 ## setting the hostname here will not make the machine reachable by this name.
 ## You may also wish to install avahi-daemon (see the "packages:" key below)
 ## to make your machine reachable by the .local domain
-hostname: ruediger2
+hostname: ruediger
 
 # Enable password authentication with the SSH daemon
 ssh_pwauth: true
@@ -30,5 +30,4 @@ users:
 ## Run arbitrary commands at rc.local like time
 runcmd:
 -  [deluser, --remove-home, ubuntu]
--  [/sbin/ldconfig]
--  [/bin/bash, /opt/ruediger2/scripts/wifi.sh]
+-  [/bin/bash, /opt/ruediger/scripts/wifi.sh]
