@@ -1,0 +1,10 @@
+[Unit]
+Description=Service to start Ruediger2
+After=syslog.target network.target
+[Service]
+ExecStart=/bin/bash /opt/ruediger2/scripts/ruediger2-control-start
+Restart=on-failure
+ResartSec=10s
+User=ruediger
+[Install]
+WantedBy=multi-user.target
