@@ -3,4 +3,4 @@
 source /opt/ros/humble/setup.bash
 source /opt/ruediger2/ruediger2_control/setup.bash
 
-ros2 launch ruediger2_control_bringup diffbot.online.launch.py
+ros2 launch ruediger2_control_bringup ranger.online.launch.py
