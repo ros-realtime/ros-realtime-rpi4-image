@@ -146,6 +146,7 @@ $ sudo apt install parted pv rsync wget systemd-container qemu-user-static make 
 ### To run
 
 1. Build the image
+  - To build the Ubuntu 22.04 + ROS Iron image: `make jammy-rt-iron`.
   - To build the Ubuntu 22.04 + ROS Humble image: `make jammy-rt-ros2`.
   - To build the Ubuntu 20.04 + ROS Galactic image: `make focal-rt-ros2`.
 2. Take the image in the `out` folder and `dd` it into an SD card (or flash it
@@ -175,7 +176,7 @@ same directory where you built the image. This will also create a file called
 image.
 
 ```
-[host]$ sudo ros-rt-img mount out/ubuntu-22.04.1-rt-ros2-arm64+raspi.img
+[host]$ sudo ros-rt-img mount out/ubuntu-22.04.2-rt-ros2-arm64+raspi.img
 ```
 
 This will mount the image at `/tmp/rpi4-image-build`. At this point, you might
