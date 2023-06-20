@@ -2,6 +2,10 @@
 Description=Service to start Ruediger2
 After=syslog.target network.target
 [Service]
+LimitMEMLOCK=102400
+LimitMEMLOCKSoft=102400
+LimitRTPRIO=99
+LimitRTPRIOSoft=99
 ExecStart=/bin/bash /opt/ruediger2/scripts/ruediger2-control-start
 Restart=on-failure
 ResartSec=10s
