@@ -1,0 +1,14 @@
+[Unit]
+Description=Service to start Stanley2
+After=syslog.target network.target
+[Service]
+LimitMEMLOCK=102400
+LimitMEMLOCKSoft=102400
+LimitRTPRIO=99
+LimitRTPRIOSoft=99
+ExecStart=/bin/bash /opt/stanley2/scripts/stanley2-control-start
+Restart=on-failure
+ResartSec=10s
+User=stan
+[Install]
+WantedBy=multi-user.target

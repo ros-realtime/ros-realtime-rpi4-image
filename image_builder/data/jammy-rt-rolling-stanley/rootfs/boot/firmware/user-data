@@ -1,0 +1,34 @@
+#cloud-config
+
+# On first boot, set the (default) stan user's password to "stan" and
+# expire user passwords
+chpasswd:
+  expire: true
+  list:
+  - stan:stan
+
+## Set the system's hostname. Please note that, unless you have a local DNS
+## setup where the hostname is derived from DHCP requests (as with dnsmasq),
+## setting the hostname here will not make the machine reachable by this name.
+## You may also wish to install avahi-daemon (see the "packages:" key below)
+## to make your machine reachable by the .local domain
+hostname: stanley2
+
+# Enable password authentication with the SSH daemon
+ssh_pwauth: true
+
+users:
+- default
+- name: stan
+  plain_text_passwd: 'stan'
+  homedir: /home/stan
+  shell: /bin/bash
+  groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, realtime, sudo, video]
+  sudo: ['ALL=(ALL) NOPASSWD:ALL']
+
+
+## Run arbitrary commands at rc.local like time
+runcmd:
+-  [deluser, --remove-home, ubuntu]
+-  [/sbin/ldconfig]
+-  [/bin/bash, /opt/stanley2/scripts/wifi.sh]

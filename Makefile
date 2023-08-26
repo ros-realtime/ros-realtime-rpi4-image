@@ -9,7 +9,7 @@ focal-rt-ruediger:
 	sudo ./ros-rt-img build focal-rt focal-rt-noetic
 
 jammy-rt-ros2:
-	sudo ./ros-rt-img build jammy-rt jammy-rt-humble
+	sudo ./ros-rt-img build jammy-rt jammy-rt-rolling
 
 jammy-rt-ruediger2:
 	sudo ./ros-rt-img build jammy-rt-humble-ruediger
