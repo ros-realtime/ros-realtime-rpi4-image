@@ -253,7 +253,7 @@ class Builder(object):
     for rootfs_path in self.rootfs_paths:
       # Use rsync instead of shutil.copytree as it is more easy to control permissions
       self._run_script_on_host([
-        "rsync", "-lrt", "-og", "--chown", "root:root", "--stats",
+        "rsync", "-Lrt", "-og", "--chown", "root:root", "--stats",
         f"{rootfs_path}/",
         self.chroot_path,
       ])
