@@ -4,14 +4,35 @@
 addgroup realtime
 
 # update the apt database and install needed packages
-# apt-get update && apt-get upgrade -y
-# apt-get install network-manager -y
-# apt-get install -y ros-$ROS_DISTRO-xacro ros-$ROS_DISTRO-ros2-control ros-$ROS_DISTRO-ros2-controllers libwiringpi-dev ros-$ROS_DISTRO-navigation2 ros-$ROS_DISTRO-nav2-bringup ros-$ROS_DISTRO-robot-localization ros-$ROS_DISTRO-v4l2-camera ros-$ROS_DISTRO-image-transport-plugins ros-$ROS_DISTRO-image-tools ros-$ROS_DISTRO-image-common
+apt-get update \
+&& apt-get upgrade -y --with-new-pkgs \
+&& apt-get install -y --no-install-recommends \
+  network-manager \
+  ros-$ROS_DISTRO-joy ros-$ROS_DISTRO-teleop-twist-joy \
+  ros-$ROS_DISTRO-teleop-twist-keyboard \
+  ament-lint \
+  clang-format \
+  python3-catkin-pkg \
+  python3-colcon-common-extensions \
+  python3-pip \
+  python3-rosdep2 \
+  python3-vcstool \
+&& python3 -m pip install colcon-mixin pre-commit
+
+rosdep update \
+&& colcon mixin update \
+&& colcon metadata update
+
+cd /opt/ruediger2/ros2_ws
+. /opt/ros/$ROS_DISTRO/setup.sh \
+&& rosdep install -q -y \
+  --from-paths src \
+  --ignore-src
 
 # reverse the network names to eth0 instead of enx<mac-address>
 # this is automatique after a apt-get update
 # https://askubuntu.com/a/1025201
-# ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
+ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
 
 # Activate ip forward for ipv4
 sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
@@ -26,3 +47,4 @@ systemctl enable ruediger2.service
 # clean up to reduce image size
 apt-get autoremove -y && apt-get clean
 rm -rf /var/lib/apt/lists/*
+rm -rf /opt/ruediger2/ros2_ws
