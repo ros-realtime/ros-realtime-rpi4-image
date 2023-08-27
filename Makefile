@@ -13,7 +13,8 @@ jammy-rt-ros2:
 	sudo chown -R $$(id -u):$$(id -g) out cache
 
 jammy-rt-ruediger2:
-	sudo ./ros-rt-img build jammy-rt-humble-ruediger
+	sudo ./ros-rt-img build jammy-rt-rolling-ruediger
+	sudo chown -R $$(id -u):$$(id -g) out cache
 
 jammy-rt-stanley2:
 	sudo ./ros-rt-img build jammy-rt-rolling-stanley
