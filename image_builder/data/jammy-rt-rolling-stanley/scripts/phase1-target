@@ -23,7 +23,7 @@ rosdep update \
 && colcon mixin update \
 && colcon metadata update
 
-cd /opt/stanley2/ros_ws
+cd /opt/stanley2/ros2_ws
 . /opt/ros/$ROS_DISTRO/setup.sh \
 && rosdep install -q -y \
   --from-paths src \
@@ -54,4 +54,4 @@ systemctl enable stanley2.service
 # clean up to reduce image size
 apt-get autoremove -y && apt-get clean
 rm -rf /var/lib/apt/lists/*
-rm -rf /opt/stanley2/ros_ws
+rm -rf /opt/stanley2/ros2_ws
