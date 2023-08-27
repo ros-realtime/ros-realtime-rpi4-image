@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mac_addr=$(echo $(cat /sys/class/net/wlan0/address) | sed 's/\://g');
-ssid="Ruediger2-"${mac_addr:6};
+ssid="Stanley2-"${mac_addr:6};
 password="s7an13y2";
 
 # Create netplan .yaml file

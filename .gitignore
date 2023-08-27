@@ -1,5 +1,7 @@
 cache/
 out/
+image_builder/data/jammy-rt-humble-ruediger/rootfs/opt/ruediger2/ruediger2_control
+image_builder/data/jammy-rt-rolling-stanley/rootfs/opt/stanley2/stanley2_control
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -17,7 +19,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# lib/
 lib64/
 parts/
 release/

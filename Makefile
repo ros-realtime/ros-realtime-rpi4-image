@@ -10,9 +10,14 @@ focal-rt-ruediger:
 
 jammy-rt-ros2:
 	sudo ./ros-rt-img build jammy-rt jammy-rt-rolling
+	sudo chown -R $$(id -u):$$(id -g) out cache
 
 jammy-rt-ruediger2:
 	sudo ./ros-rt-img build jammy-rt-humble-ruediger
+
+jammy-rt-stanley2:
+	sudo ./ros-rt-img build jammy-rt-rolling-stanley
+	sudo chown -R $$(id -u):$$(id -g) out cache
 
 clean:
 	sudo ./ros-rt-img teardown
