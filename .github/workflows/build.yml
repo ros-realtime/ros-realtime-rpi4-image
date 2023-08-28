@@ -53,6 +53,6 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: img-file-jammy
-          path: out/*.img
+          path: out/*.img.xz
 
   # TODO: release image
