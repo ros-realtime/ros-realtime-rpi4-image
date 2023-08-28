@@ -10,6 +10,7 @@ apt-get update \
   network-manager \
   ros-$ROS_DISTRO-joy ros-$ROS_DISTRO-teleop-twist-joy \
   ros-$ROS_DISTRO-teleop-twist-keyboard \
+  libwiringpi-dev \
   ament-lint \
   clang-format \
   python3-catkin-pkg \
