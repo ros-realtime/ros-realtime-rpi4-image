@@ -8,4 +8,4 @@ sudo apt-get install -y parted pv rsync wget systemd-container qemu-user-static 
 
 wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
 chmod +x pishrink.sh
-sudo mv pishrink.sh /usr/local/bin
+sudo mv pishrink.sh /usr/local/bin/pishrink
