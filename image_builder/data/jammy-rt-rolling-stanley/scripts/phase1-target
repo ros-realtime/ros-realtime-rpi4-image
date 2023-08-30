@@ -6,7 +6,7 @@ addgroup realtime
 # update the apt database and install needed packages
 apt-get update \
 && apt-get upgrade -y --with-new-pkgs \
-&& apt-get install -y --no-install-recommends \
+&& apt-get install -y \
   network-manager \
   ros-$ROS_DISTRO-joy ros-$ROS_DISTRO-teleop-twist-joy \
   ros-$ROS_DISTRO-teleop-twist-keyboard \
