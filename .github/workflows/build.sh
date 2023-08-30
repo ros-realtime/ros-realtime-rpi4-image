@@ -18,7 +18,8 @@ ls -lh out/
 
 for img in out/*.img; do
   echo "  Compressing $img"
-  xz -9 $img
+#   xz -9 $img
+  xz --extreme --threads=0 -9 $img
 done
 
 echo "After compression:"
