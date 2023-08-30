@@ -96,7 +96,7 @@ done
 echo 'Compress ISO file with xz'
 for iso in out/*.img; do
   echo "  Compressing $iso"
-  xz -9 $iso
+  xz --extreme --threads=0 -9 $iso
 done
 
 result=0
