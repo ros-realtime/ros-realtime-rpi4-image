@@ -23,7 +23,7 @@ users:
   plain_text_passwd: 'stan'
   homedir: /home/stan
   shell: /bin/bash
-  groups: [adm, audio, cdrom, dialout, dip, floppy, lxd, netdev, plugdev, realtime, sudo, video]
+  groups: [adm, audio, cdrom, dialout, dip, floppy, input, lxd, netdev, plugdev, realtime, sudo, video]
   sudo: ['ALL=(ALL) NOPASSWD:ALL']
 
 
