@@ -1,3 +1,53 @@
+# Generate img file
+
+First you need to generate an image with RT OS and ROS installed
+
+For this, you can run the install dependencies script
+```
+./scripts/install_dependencies.sh
+```
+
+then generate the RT OS and ROS image
+```
+make jammy-rt-ros2
+```
+This will generate an image with the last Ubuntu and the rt kernel and install ROS
+
+in the folder out/ubuntu-22.04.3-rt-ros2-arm64+raspi.img
+
+You should now copy this image in the cache in order to use it to generate Ruediger or Stanley image
+you can compress it using pyshrink
+use a new terminal
+```
+cd /tmp
+wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh
+chmod +x pishrink.sh
+sudo mv pishrink.sh /usr/local/bin
+```
+back in the terminal from ros-realtime-rpi4-image
+```
+sudo pishrink.sh out/ubuntu-22.04.3-rt-ros2-arm64+raspi.img
+xz --extreme --threads=0 -9 out/ubuntu-22.04.3-rt-ros2-arm64+raspi.img
+mv out/ubuntu-22.04.3-rt-ros2-arm64+raspi.img.xz cache/
+```
+
+Now you need one more step.
+There are symlink to the src repository and the compiled repository of the ros2_ws you want to be installed on the RPi
+if those symlink does not exist the rsync will fail and the image creation process will not work
+
+see there
+(ros2_ws/src)[image_builder/image_builder/data/jammy-rt-rolling-ruediger/rootfs/opt/ruediger2/ros2_ws/src]
+(ruediger2_control)[image_builder/image_builder/data/jammy-rt-rolling-ruediger/rootfs/opt/ruediger2/ruediger2_control]
+(ros2_ws/src)[image_builder/image_builder/data/jammy-rt-rolling-stanley/rootfs/opt/stanley2/ros2_ws/src]
+
+After this, you can generate the final image:
+
+```
+./scripts/e2e_generate_iso.sh # this will generate Stanley
+./scripts/e2e_generate_iso.sh -b ruediger2 # this will generate Ruediger
+```
+
+___Original_Readme___
 Raspberry Pi image with ROS 2 and the real-time kernel
 =====================================================
 
