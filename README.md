@@ -47,6 +47,14 @@ After this, you can generate the final image:
 ./scripts/e2e_generate_iso.sh -b ruediger2 # this will generate Ruediger
 ```
 
+now you can flash you sd card with dd
+```
+lsblk
+sudo umount /media/$USER/*
+xzcat out/ubuntu-***-arm64.img.xz | sudo dd of=/dev/SDCARDNAMEGOESHERE bs=4M conv=fsync # /dev/sda/b/c most of the time
+xzcat out/ubuntu-***-arm64.img.xz | sudo dd of=/dev/SDCARDNAMEGOESHERE bs=4M conv=fsync status=progress # /dev/sda/b/c most of the time
+```
+
 ___Original_Readme___
 Raspberry Pi image with ROS 2 and the real-time kernel
 =====================================================
