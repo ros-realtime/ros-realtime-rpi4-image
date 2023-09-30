@@ -80,9 +80,15 @@ done
 # Create trap to make sure all artifacts are removed on exit
 trap 'cleanup $result' EXIT
 
-echo 'Generating ISO for ' ${ROBOT_BUILDER}
+echo 'Generating ISO for' ${ROBOT_BUILDER}
 echo 'You will be ask to enter your root password'
 
+if [ ! -f $ROOT_DIR/cache/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img.xz ]; then
+  make jammy-rt-ros2
+  sudo pishrink.sh $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img
+  xz --extreme --threads=0 -9 $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img
+  mv $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img.xz $ROOT_DIR/cache/
+fi
 make jammy-rt-${ROBOT_BUILDER}
 
 echo 'Shrimp ISO file with PiShrimp'
@@ -90,7 +96,7 @@ echo 'PiShrimp should already be installed'
 
 for iso in out/*.img; do
   echo "  Shrimping $iso"
-  sudo pishrink $iso
+  sudo pishrink.sh $iso
 done
 
 echo 'Compress ISO file with xz'
