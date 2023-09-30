@@ -98,11 +98,13 @@ keep_sudo_active &
 pid_sudo=$!
 echo "PID Sudo => ${pid_sudo}"
 
-if [ ! -f $ROOT_DIR/cache/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img.xz ]; then
+iso_default_name=ubuntu-22.04.3-v5.15.98-rt62-humble-arm64+raspi.img
+
+if [ ! -f $ROOT_DIR/cache/$iso_default_name.xz ]; then
   make jammy-rt-ros2
-  sudo pishrink.sh $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img
-  xz --extreme --threads=0 -9 $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img
-  mv $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img.xz $ROOT_DIR/cache/
+  sudo pishrink.sh $ROOT_DIR/out/$iso_default_name
+  xz --extreme --threads=0 -9 $ROOT_DIR/out/$iso_default_name
+  mv $ROOT_DIR/out/$iso_default_name.xz $ROOT_DIR/cache/
 fi
 
 make jammy-rt-${ROBOT_BUILDER}
