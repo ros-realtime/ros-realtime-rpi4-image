@@ -43,11 +43,22 @@ success(){
 # Utilities
 cleanup(){
   # Usage: cleanup RESULT
+  kill $pid_sudo
   if [[ "$1" -eq 0 ]]; then
     success PASS
   else
     error FAIL
   fi
+}
+
+keep_sudo_active(){
+  while :
+  do
+    echo "Reactivating sudo ..."
+    sudo -v
+    sleep 4m
+    # sleep 4
+  done
 }
 
 usage="$(basename "$0") [-h|--help] [-b |--builder string] -- Generate Iso file pishrimp it and compress it
@@ -83,12 +94,17 @@ trap 'cleanup $result' EXIT
 echo 'Generating ISO for' ${ROBOT_BUILDER}
 echo 'You will be ask to enter your root password'
 
+keep_sudo_active &
+pid_sudo=$!
+echo "PID Sudo => ${pid_sudo}"
+
 if [ ! -f $ROOT_DIR/cache/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img.xz ]; then
   make jammy-rt-ros2
   sudo pishrink.sh $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img
   xz --extreme --threads=0 -9 $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img
   mv $ROOT_DIR/out/ubuntu-22.04.3-v5.15.98-rt62-rolling-arm64+raspi.img.xz $ROOT_DIR/cache/
 fi
+
 make jammy-rt-${ROBOT_BUILDER}
 
 echo 'Shrimp ISO file with PiShrimp'
