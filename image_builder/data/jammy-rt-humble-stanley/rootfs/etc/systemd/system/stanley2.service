@@ -8,7 +8,7 @@ LimitRTPRIO=99
 LimitRTPRIOSoft=99
 ExecStart=/bin/bash /opt/stanley2/scripts/stanley2-control-start
 Restart=on-failure
-ResartSec=10s
+RestartSec=10s
 User=stan
 [Install]
 WantedBy=multi-user.target

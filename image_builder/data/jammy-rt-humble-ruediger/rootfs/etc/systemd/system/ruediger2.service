@@ -8,7 +8,7 @@ LimitRTPRIO=99
 LimitRTPRIOSoft=99
 ExecStart=/bin/bash /opt/ruediger2/scripts/ruediger2-control-start
 Restart=on-failure
-ResartSec=10s
+RestartSec=10s
 User=ruediger
 [Install]
 WantedBy=multi-user.target
