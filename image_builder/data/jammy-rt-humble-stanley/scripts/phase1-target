@@ -49,6 +49,7 @@ ls -la /usr/local/lib
 # activate stanley2 service
 systemctl daemon-reload
 systemctl enable stanley2.service
+systemctl enable stanley2_vmxpi.service
 
 # clean up to reduce image size
 apt-get autoremove -y && apt-get clean

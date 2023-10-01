@@ -1,0 +1,14 @@
+[Unit]
+Description=Service to start Vmxpi
+After=syslog.target network.target
+[Service]
+LimitMEMLOCK=102400
+LimitMEMLOCKSoft=102400
+LimitRTPRIO=99
+LimitRTPRIOSoft=99
+ExecStart=/bin/bash /opt/stanley2/scripts/stanley2-vmxpi-start
+Restart=on-failure
+RestartSec=10s
+User=root
+[Install]
+WantedBy=multi-user.target
