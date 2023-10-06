@@ -3,4 +3,6 @@
 source /opt/ros/humble/setup.bash
 source /opt/stanley2/stanley2_control/setup.bash
 
+# export ROS_DOMAIN_ID=33 # DOMAIN ID should be in range [0,101] (included)
+
 ros2 launch ros2_vmxpi ros2_vmxpi_launch.py
