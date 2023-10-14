@@ -64,6 +64,9 @@ systemctl enable cpu-frequency
 # Disable rt-throttling
 systemctl enable rt-throttling
 
+# Disable memory compaction
+systemctl enable memory-compaction
+
 # Disable unattended-upgrades
 apt remove -y unattended-upgrades
 
