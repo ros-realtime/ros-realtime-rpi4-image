@@ -29,6 +29,19 @@ cd /opt/stanley2/ros2_ws
   --from-paths src \
   --ignore-src
 
+# install yd-lidar-SDK dependencies
+# sudo apt install cmake pkg-config
+# cd /tmp
+# git clone https://github.com/YDLIDAR/YDLidar-SDK.git /tmp/YDLidar-SDK
+# cd YDLidar-SDK/build
+# cmake ..
+# make
+# make install
+
+# git clone https://github.com/YDLIDAR/ydlidar_ros2_driver.git /tmp/ydlidar_ros2_ws/src/ydlidar_ros2_driver
+# cd /tmp/ydlidar_ros2_ws
+# colcon build --symlink-install
+
 # reverse the network names to eth0 instead of enx<mac-address>
 # this is automatique after a apt-get update
 # https://askubuntu.com/a/1025201
@@ -38,13 +51,13 @@ ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
 sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
 
 # link libvmxpi
-ls -la /usr/local/lib
+ls -lA /usr/local/lib
 ln -fs libvmxpi_hal_cpp.so.1.3.1 /usr/local/lib/libvmxpi_hal_cpp.so.1
 ln -fs libvmxpi_hal_cpp.so.1 /usr/local/lib/libvmxpi_hal_cpp.so
 # link libgpio vmx versionspecial
-ln -fs libpigpio.so.vmx_79_rebase_bugfix /usr/local/lib/libpigpio.so
+ln -fs libpigpio.so.vmx_79 /usr/local/lib/libpigpio.so.1
 ln -fs libpigpio.so.1 /usr/local/lib/libpigpio.so
-ls -la /usr/local/lib
+ls -lA /usr/local/lib
 
 # activate stanley2 service
 # commented out as a requirement to humble version
