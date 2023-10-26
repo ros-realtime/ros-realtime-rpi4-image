@@ -52,7 +52,10 @@ now you can flash you sd card with dd
 lsblk
 sudo umount /media/$USER/*
 xzcat out/ubuntu-***-arm64.img.xz | sudo dd of=/dev/SDCARDNAMEGOESHERE bs=4M conv=fsync # /dev/sda/b/c most of the time
-xzcat out/ubuntu-***-arm64.img.xz | sudo dd of=/dev/SDCARDNAMEGOESHERE bs=4M conv=fsync status=progress # /dev/sda/b/c most of the time
+xzcat out/ubuntu-***-arm64.img.xz | sudo dd of=/dev/SDCARDNAMEGOESHERE bs=16M conv=fsync status=progress # /dev/sda/b/c most of the time
+
+xzcat out/ubuntu-***-arm64.img.xz | sudo dd of=/dev/sdX bs=16M conv=fdatasync oflag=direct
+xzcat out/ubuntu-***-arm64.img.xz | sudo dd of=/dev/sdX bs=16M conv=fdatasync iflag=fullblock oflag=direct
 ```
 
 ___Original_Readme___
