@@ -1,0 +1,9 @@
+#!/bin/bash
+
+source /opt/ros/humble/setup.bash
+source /opt/stanley2/stanley2_control/setup.bash
+
+# export ROS_DOMAIN_ID=33 # DOMAIN ID should be in range [0,101] (included)
+
+ros2 launch flo_drive flo_drive_joy.launch.py joy:=/opt/stanley2/stanley2_control/flo_drive/share/flo_drive/config/studica_ps3.yaml
+# ros2 launch flo_drive flo_drive_joy.launch.py joy:=/opt/stanley2/stanley2_control/flo_drive/share/flo_drive/config/studica_ps4.yaml
