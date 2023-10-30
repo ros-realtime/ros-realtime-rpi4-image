@@ -30,17 +30,14 @@ cd /opt/stanley2/ros2_ws
   --ignore-src
 
 # install yd-lidar-SDK dependencies
-# sudo apt install cmake pkg-config
-# cd /tmp
-# git clone https://github.com/YDLIDAR/YDLidar-SDK.git /tmp/YDLidar-SDK
-# cd YDLidar-SDK/build
-# cmake ..
-# make
-# make install
-
-# git clone https://github.com/YDLIDAR/ydlidar_ros2_driver.git /tmp/ydlidar_ros2_ws/src/ydlidar_ros2_driver
-# cd /tmp/ydlidar_ros2_ws
-# colcon build --symlink-install
+sudo apt install cmake pkg-config
+cd /tmp
+git clone https://github.com/YDLIDAR/YDLidar-SDK.git /tmp/YDLidar-SDK
+mkdir -p /tmp/YDLidar-SDK/build
+cd YDLidar-SDK/build
+cmake ..
+make
+make install
 
 # reverse the network names to eth0 instead of enx<mac-address>
 # this is automatique after a apt-get update
@@ -61,9 +58,10 @@ ls -lA /usr/local/lib
 
 # activate stanley2 service
 # commented out as a requirement to humble version
-# systemctl daemon-reload
+systemctl daemon-reload
 # systemctl enable stanley2.service
-# systemctl enable stanley2_vmxpi.service
+systemctl enable stanley2_vmxpi.service
+systemctl enable flo_drive_joy.service
 
 # clean up to reduce image size
 apt-get autoremove -y && apt-get clean
