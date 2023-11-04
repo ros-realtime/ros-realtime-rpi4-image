@@ -44,6 +44,9 @@ make install
 # https://askubuntu.com/a/1025201
 ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
 
+# add udev rules to get a specific tty for ydlidar
+echo 'SUBSYSTEM=="tty",ATTRS{idVendor}=="10c4",ATTRS{idProduct}=="ea60",SYMLINK+="ydlidar"' > /etc/udev/rules.d/10-ydlidar-default.rules
+
 # Activate ip forward for ipv4
 sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
 
