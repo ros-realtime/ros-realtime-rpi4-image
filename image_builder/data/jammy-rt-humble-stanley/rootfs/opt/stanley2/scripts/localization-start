@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source /opt/ros/humble/setup.bash
+source /opt/stanley2/stanley2_control/local_setup.bash
+
+# export ROS_DOMAIN_ID=33 # DOMAIN ID should be in range [0,101] (included)
+
+ros2 launch nav2_bringup localization_launch.py map:=/opt/stanley2/stanley2_control/maps/share/maps/trainings/Demo/demo.yaml params_file:=/opt/stanley2/stanley2_control/flo_bringup/share/flo_bringup/config/navigation.config.yaml

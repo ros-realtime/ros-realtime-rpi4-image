@@ -17,7 +17,17 @@ apt-get update \
   python3-pip \
   python3-rosdep2 \
   python3-vcstool \
-&& python3 -m pip install colcon-mixin pre-commit
+&& python3 -m pip install colcon-mixin pre-commit vcgencmd
+
+# install extra cameras dependencies
+# TODO: Manage with rosdep in the future
+apt-get install -y \
+  libopencv-dev \
+  ros-$ROS_DISTRO-cv-bridge \
+  python3-opencv \
+  libzbar-dev \
+  libgflags-dev nlohmann-json3-dev libgoogle-glog-dev \
+  ros-$ROS_DISTRO-image-transport ros-$ROS_DISTRO-image-publisher ros-$ROS_DISTRO-camera-info-manager
 
 rosdep update \
 && colcon mixin update \
@@ -46,6 +56,8 @@ ln -s /dev/null /etc/udev/rules.d/80-net-setup-link.rules
 
 # add udev rules to get a specific tty for ydlidar
 echo 'SUBSYSTEM=="tty",ATTRS{idVendor}=="10c4",ATTRS{idProduct}=="ea60",SYMLINK+="ydlidar"' > /etc/udev/rules.d/10-ydlidar-default.rules
+echo 'SUBSYSTEM=="usb",ATTR{idVendor}=="2bc5",ATTR{idProduct}=="065c",GROUP:="video",SYMLINK+="gemini_e"' > /etc/udev/rules.d/10-obsensor-libusb.rules
+echo 'SUBSYSTEM=="usb",ATTR{idVendor}=="2bc5",ATTR{idProduct}=="055c",GROUP:="video",SYMLINK+="gemini_e_rgb"' >> /etc/udev/rules.d/10-obsensor-libusb.rules
 
 # Activate ip forward for ipv4
 sed -i "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
