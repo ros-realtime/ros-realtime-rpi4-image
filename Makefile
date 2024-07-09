@@ -1,4 +1,4 @@
-.PHONY: focal-rt-ros2 jammy-rt-ros2 clean
+.PHONY: focal-rt-ros2 jammy-rt-ros2 focal-rt-ros clean
 
 jammy-rt-ros2:
 	sudo ./ros-rt-img build jammy-rt jammy-rt-humble
@@ -7,6 +7,9 @@ jammy-rt-ros2:
 #       arguments
 focal-rt-ros2:
 	sudo ./ros-rt-img build focal-rt focal-rt-galactic
+
+focal-rt-ros:
+	sudo ./ros-rt-img build focal-rt focal-rt-noetic
 
 clean:
 	sudo ./ros-rt-img teardown

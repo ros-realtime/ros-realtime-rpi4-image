@@ -148,6 +148,7 @@ $ sudo apt install parted pv rsync wget systemd-container qemu-user-static make 
 1. Build the image
   - To build the Ubuntu 22.04 + ROS Humble image: `make jammy-rt-ros2`.
   - To build the Ubuntu 20.04 + ROS Galactic image: `make focal-rt-ros2`.
+  - To build the Ubuntu 20.04 + ROS Noetic image: `make focal-rt-ros`.
 2. Take the image in the `out` folder and `dd` it into an SD card (or flash it
    in another way).
 
