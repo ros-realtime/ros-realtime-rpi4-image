@@ -8,6 +8,9 @@ jammy-rt-ros2:
 focal-rt-ros2:
 	sudo ./ros-rt-img build focal-rt focal-rt-galactic
 
+noble-rt-ros2:
+	sudo ./ros-rt-img build noble-rt noble-rt-jazzy
+
 clean:
 	sudo ./ros-rt-img teardown
 	sudo rm -rf out cache

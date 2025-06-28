@@ -10,5 +10,5 @@ ls -lh out/
 cd out
 
 echo "After compression:"
-pigz *.img
+time zstd -12 *.img
 ls -lh .

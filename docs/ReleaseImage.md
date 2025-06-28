@@ -29,7 +29,7 @@ $ ./run_latency_experiment.sh
    the version string of the image we download, and the `kernel_version` is the
    output of `uname -r`.
 10. Push the tag to the repo.
-11. Take the image you built, `xz` it via the command: `cd out; sudo xz -k ubuntu-22.04.1-rt-ros2-arm64+raspi.img`.
+11. Take the image you built, `zstd` it via the command: `cd out; sudo zstd -k -12 ubuntu-22.04.1-rt-ros2-arm64+raspi.img`.
 12. [Create a release based on the tag](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases/new). Upload the compressed image. Follow the below template for the release notes:
 
 ```
