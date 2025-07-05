@@ -33,7 +33,7 @@ $ ./run_latency_experiment.sh
 12. [Create a release based on the tag](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases/new). Upload the compressed image. Follow the below template for the release notes:
 
 ```
-ROS 2 {ros_release} image for the Raspberry Pi 4 with the real-time kernel (`PREEMPT_RT`).
+ROS 2 {ros_release} image for the Raspberry Pi 3/4/4 with the real-time kernel (`PREEMPT_RT`).
 
 ### Settings
 
@@ -45,7 +45,16 @@ ROS 2 {ros_release} image for the Raspberry Pi 4 with the real-time kernel (`PRE
 
 ### Benchmarks
 
-<img src=https://github.com/ros-realtime/ros-realtime-rpi4-image/raw/master/latency-analysis/data/{file.png} width=500 />
+| Model | Result |
+| ----- | ------ |
+| Raspberry Pi 3 | <img src=https://github.com/ros-realtime/ros-realtime-rpi4-image/raw/master/latency-analysis/data/{file.png} width=600 /> |
+| Raspberry Pi 4 | <img src=https://github.com/ros-realtime/ros-realtime-rpi4-image/raw/master/latency-analysis/data/{file.png} width=600 /> |
+| Raspberry Pi 5 | <img src=https://github.com/ros-realtime/ros-realtime-rpi4-image/raw/master/latency-analysis/data/{file.png} width=600 /> |
+
+### Checksum 
+
+- ubuntu-24.04.2-rt-ros2-arm64+raspi.img.zst: 69799c9388c6be5b6703b5c7954ad2c926c466e53108873e3f2bc0593968939b  
 ```
+
 
 And you're done!
