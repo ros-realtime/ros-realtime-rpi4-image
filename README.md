@@ -3,10 +3,30 @@ Raspberry Pi image with ROS 2 and the real-time kernel
 
 [![Build image](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml/badge.svg)](https://github.com/ros-realtime/ros-realtime-rpi4-image/actions/workflows/build.yml)
 
-This repo builds a Raspberry Pi 4 image with ROS 2 and the real-time kernel
+This repo builds a Raspberry Pi image with ROS 2 and the real-time kernel
 pre-installed. This image can be downloaded directly from [the releases
 page](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases),
-flashed to a SD card, and booted on a Raspberry Pi 4.
+flashed to a SD card, and booted on a Raspberry Pi.
+
+Support matrix
+--------------
+
+| Ubuntu Version | ROS version | Hardware model | Supported | Measured latency |
+| -------------- | ----------- | -------------- | --------- | ---------------- |
+| 22.04 (Jammy)  | Humble      | Raspberry Pi 3 | ❌        | N/A              |
+| 22.04 (Jammy)  | Humble      | Raspberry Pi 4 | ✅        | [58 μs](./latency-analysis/data/22.04_5.15.98-rt62-raspi.png) |
+| 22.04 (Jammy)  | Humble      | Raspberry Pi 5 | ❌        | N/A              |
+| 24.04 (Noble)  | Jazzy       | Raspberry Pi 3 | ✅(1)     | [330 μs](./latency-analysis/data/24.04_6.8.4-rt11-raspi_rpi3b.png) (avg = 100 μs) |
+| 24.04 (Noble)  | Jazzy       | Raspberry Pi 4 | ✅        | [82 μs](./latency-analysis/data/24.04_6.8.4-rt11-raspi_rpi4.png) |
+| 24.04 (Noble)  | Jazzy       | Raspberry Pi 5 | ✅        | [34 μs](./latency-analysis/data/24.04_6.8.4-rt11-raspi_rpi5.png) |
+
+*(1) Raspberry Pi 3 is usable but not recommended for 1000 Hz applications due
+to the excessive scheduling latency from the weak CPU.*
+
+The latency measurements are from the worst-case scheduling latency observed
+with 2 hours of CPU stress test alongside cyclictest. All tests done at the
+stock CPU frequency of the image. See [this script](./latency-analysis/run_latency_experiment.sh)
+for details.
 
 How to
 ------
@@ -14,20 +34,21 @@ How to
 Before you start, you need an SD card that is at least 8GB in size.
 
 1. Download the desired image from [the releases page](https://github.com/ros-realtime/ros-realtime-rpi4-image/releases).
-2. The image is compressed with the `xz` compression format. You will need to
-   decompress it. On Windows, try using [7-zip](https://www.7-zip.org/) to do
-   this if your file archiver doesn't decompress this format already. Once
-   decompressed, you should have a file that ends with the extension `.img`.
-    1. On Mac/GNU-Linux, use `xz --decompress file.img.xz` in the command line.
-3. The easiest way to flash the image is via the [Raspberry Pi imager](https://www.raspberrypi.com/software/). 
+2. The image is compressed with the `zstd` compression format. You will need to
+   decompress it via the command `zstd -d filename.img.zst`. You may need to
+   install zstd via:
+    1. On Mac: `sudo port install zstd` or `brew install zstd`
+    2. On Ubuntu: `sudo apt-get install zstd`
+    3. On Windows: Install the executable from [here](https://github.com/facebook/zstd/releases).
+3. After decompressing the image: the easiest way to flash the image is via the [Raspberry Pi imager](https://www.raspberrypi.com/software/).
     1. Using the Raspberry Pi Image, click `CHOOSE OS`.
     2. Scroll all the way down and click `Use custom`.
     3. Browse and select the image file.
     4. Select the storage device.
     5. Click `Write` to flash the image.
     6. Wait for it to be done.
-4. Unplug the SD card and plug it into the Raspberry Pi 4. Turn on the
-   Raspberry Pi.
+4. Unplug the SD card and plug it into the Raspberry Pi. Turn on the Raspberry
+Pi.
 5. The default username is `ubuntu` and the password is `ubuntu`. The default
    hostname is `ubuntu`. You can login either directly on the Raspberry Pi or
    via SSH (enabled by default). You'll need to change your password the first
@@ -39,7 +60,7 @@ Before you start, you need an SD card that is at least 8GB in size.
 ```
 sudo apt update && sudo apt upgrade
 sudo apt install ubuntu-desktop
-sudo apt install ros-humble-desktop
+sudo apt install ros-jazzy-desktop
 ```
 
 7. You can now use ROS 2. To confirm, type `ros2` into the terminal. You should
@@ -62,8 +83,20 @@ options:
 Bonus setup
 -----------
 
-- [Setup WiFi without a GUI](https://ubuntu.com/tutorials/how-to-install-ubuntu-on-your-raspberry-pi#3-wifi-or-ethernet).
-- [Overclocking the CPU](https://magpi.raspberrypi.com/articles/how-to-overclock-raspberry-pi-4).
+### Setup WiFi before booting
+
+- Open up the boot partition and edit `network-config`.
+- Uncomment the `wifis` part of the yaml with your wifi.
+
+## Enable SSH password login
+
+- Open up the book partition and edit `user-data`.
+- Change the `chpasswd` part
+- Set `ssh_pwauth` to true if you want to login via ssh password
+
+### Others
+
+- For [Overclocking the Raspbery Pi 4 CPU](https://magpi.raspberrypi.com/articles/how-to-overclock-raspberry-pi-4).
   I've had good luck with `arm_freq=2000` and `over_voltage=6` when using power
   supplies that can consistently output 5V/3A (like the official power supply).
 - Try out real-time programming with the following resources:
@@ -75,7 +108,7 @@ image builder.
 Custom Image Builder for the Raspberry Pi for ROS 2 + PREEMPT_RT
 ===============================================================
 
-This is a custom image builder for the Raspberry Pi 4. Some features:
+This is a custom image builder for the Raspberry Pi. Some features:
 
 - Customize the official Ubuntu server image for the Raspberry Pi by mounting
   it locally (via loop device) and chrooting into it (via systemd-nspawn and
@@ -119,7 +152,7 @@ How to use
 
 ### System requirements
 
-**Why not docker?** Unfortunately, the current setup doesn't work in Docker, as 
+**Why not docker?** Unfortunately, the current setup doesn't work in Docker, as
 I used `systemd-nspawn` to make setting up and executing commands in a chroot easier
 (mainly so I can save some time figuring out the various bind mounts I need, to
 shutdown the container correctly if a command fails, and to force quit a

@@ -1,0 +1,11 @@
+[Unit]
+Description=Disable memory compaction
+ConditionPathExists=/proc/sys/vm/compact_unevictable_allowed
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/ros2-rt-rpi4/memory-compaction
+
+[Install]
+WantedBy=multi-user.target

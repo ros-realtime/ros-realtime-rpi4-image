@@ -1,0 +1,11 @@
+[Unit]
+Description=RT throttling
+ConditionPathExists=/proc/sys/kernel/sched_rt_runtime_us
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/ros2-rt-rpi4/rt-throttling
+
+[Install]
+WantedBy=multi-user.target

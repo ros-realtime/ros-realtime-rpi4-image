@@ -24,19 +24,6 @@ jobs:
             - '.github/workflows/setup-dependencies.sh'
             - '.github/workflows/build.yml'
 
-  build-focal:
-    needs: changes
-    runs-on: ubuntu-latest
-    if: ${{ needs.changes.outputs.check-changes == 'true' }}
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup build dependencies
-        run: .github/workflows/setup-dependencies.sh
-
-      - name: Build image
-        run: .github/workflows/build.sh focal-rt-ros2
-
   build-jammy:
     needs: changes
     runs-on: ubuntu-latest
@@ -50,4 +37,27 @@ jobs:
       - name: Build image
         run: .github/workflows/build.sh jammy-rt-ros2
 
-  # TODO: release image
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpi-image-jammy
+          path: out/*.img.zst
+          compression-level: 0
+
+  build-noble:
+    needs: changes
+    runs-on: ubuntu-latest
+    if: ${{ needs.changes.outputs.check-changes == 'true' }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup build dependencies
+        run: .github/workflows/setup-dependencies.sh
+
+      - name: Build image
+        run: .github/workflows/build.sh noble-rt-ros2
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpi-image-noble
+          path: out/*.img.zst
+          compression-level: 0
